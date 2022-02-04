@@ -2,7 +2,7 @@
   <nav>
     <div id="nav" class="nav-wrapper green">
       <div class="container">
-        <router-link to="/" class="brand-logo">rihnoboard</router-link>
+        <router-link to="/" class="brand-logo">Random Food List</router-link>
         <ul class="right">
           <li v-if="isLoggedIn"><router-link to="/">Dashboard</router-link></li>
           <li v-if="!isLoggedIn"><router-link to="/login">Login</router-link></li>
