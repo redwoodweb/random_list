@@ -38,8 +38,7 @@ export default {
       password: '',
       user: {
         ep_id: null,
-        name: null,
-        age: null
+        list: []
       }
     }
   },
@@ -48,16 +47,22 @@ export default {
       firebase.auth()
         .createUserWithEmailAndPassword(this.email.trim(), this.password)
         .then(user => {
-          alert(`Acount created for ${this.email}`)
-          this.$router.push('/')
-          this.user.ep_id = this.email.trim()
-          // db.collection('user').add(this.user) /*가입 후 해당 아이디 관련 데이터 생성 */
+          this.user.ep_id = this.email.trim()                
+          db.collection('user').add(this.user)
+          .then(() => {
+            alert(`Acount created for ${this.email}`)    
+            this.$router.go()
+          })
+          .catch((error) => {
+            console.error(error);
+          })
+          // this.$router.go({ path: this.$router.path })              
         },
         err => {
           alert(err.message)
         }
         )
-      e.preventDefault()
+      // e.preventDefault()
     }
   }
 }

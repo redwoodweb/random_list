@@ -29,12 +29,17 @@
 
 <script>
 import firebase from 'firebase'
+import {db} from './firebaseset'
 export default {
   name: 'register',
   data () {
     return {
       email: '',
-      password: ''
+      password: '',
+      user: {
+        id: '',
+        list: ''
+      }
     }
   },
   methods: {

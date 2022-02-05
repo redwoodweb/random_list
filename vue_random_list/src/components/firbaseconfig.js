@@ -1,8 +1,9 @@
 export const firebaseConfig = {
-  apiKey: 'AIzaSyBtlqgPVu1a4PN3HeHSMNliM1E9ozIPwBU',
-  authDomain: 'vue-firebase-1ac80.firebaseapp.com',
-  projectId: 'vue-firebase-1ac80',
-  storageBucket: 'vue-firebase-1ac80.appspot.com',
-  messagingSenderId: '398638164632',
-  appId: '1:398638164632:web:a0463d7381df236a937eed'
+  apiKey: "AIzaSyCPKD8JZdTCQ64fzvpTiTble8SoDbMe83U",
+  authDomain: "randomlist-c9825.firebaseapp.com",
+  projectId: "randomlist-c9825",
+  storageBucket: "randomlist-c9825.appspot.com",
+  messagingSenderId: "1081570223318",
+  appId: "1:1081570223318:web:59c629f81fbc781bc41577",
+  measurementId: "G-W6EE9EC4SV"
 }

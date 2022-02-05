@@ -1,43 +1,46 @@
 <template>
   <div class="intro contents">
-    <h2>Dashboard</h2>
+    <div class="input-field col s12">
+      <input id="first_name" type="text" v-model="inputText" v-on:keyup.enter="inputTextFunc">
+      <label for="first_name">First Name</label>
+    </div>
+    <div>{{inputText}}</div>
     <ul class="collection with-header">
       <li class="collection-header">
-        <h4>employee</h4>
+        <h4>food list</h4>
       </li>
-      <li v-for="items in employee" v-bind:key="items.id" class="collection-item">
-        <div class="chip">{{items.ep_id}}</div>{{items.name}}
-        <router-link v-bind:to="{ name: 'employeeview', params: {employee_id: items.ep_id} }" class="secondary-content">
-          <i class="fa fa-eye"></i>
-        </router-link>
+      <li v-for="(items,i) in user.list" v-bind:key="items.id" class="collection-item">
+        <div class="chip">{{i}}{{items}}<i class="close material-icons" v-on:click="removeList(`${items}`)">close</i></div>
       </li>
     </ul>
     <div class="fixed-action-btn">
-      <router-link :to="{ name: 'new' }" class="btn-floating btn-large red"><i class="fa fa-plus"></i></router-link>
+      <button class="btn-floating btn-large red" v-on:click="inputTextFunc"><i class="fa fa-plus"></i></button>
     </div>
   </div>
 </template>
 <script>
+import firebase from 'firebase'
 import {db} from './firebaseset'
 export default {
   name: 'DashBoard',
   data () {
     return {
-      employee: []
+      user:{
+        ep_id: null,
+        list: []
+      },
+      inputText: ''      
     }
   },
-  created () {
+  created () {    
+    let currentUser = firebase.auth().currentUser.email    
     db.collection('user').get().then(querySnapshop => {
       querySnapshop.forEach(doc => {
-        console.log(doc.data().age)
-        const data = {
-          'id': doc.id,
-          'ep_id': doc.data().ep_id,
-          'name': doc.data().name,
-          'age': doc.data().age
+        if( currentUser == doc.data().ep_id ) {
+          this.user.ep_id = doc.data().ep_id
+          this.user.list = doc.data().list
         }
-        this.employee.push(data)
-      })
+    })
     })
   },
   mounted () {
@@ -47,16 +50,33 @@ export default {
       // elem.querySelector('h2').style.margin = '0'
       // $(elem).find('h2').css('background', 'red')
     })
+  },
+  methods: {
+    inputTextFunc: function() {           
+      if( this.inputText != '' ) {
+      this.user.list.push(this.inputText)
+      db.collection('user').where( 'ep_id', '==' , this.user.ep_id ).get()
+      .then( querySnapshop => {
+        querySnapshop.forEach( doc => {
+          doc.ref.update(this.user)
+        })
+      })
+      }
+      this.inputText = ''
+    },
+    removeList: function (text) {
+      console.log(text)
+      let listelm = this.user.list
+      for ( const i in listelm) {
+        console.log(i)
+        if( listelm[i] == text ) {
+          console.log(listelm[i]+','+text)
+          listelm.splice(i,1)
+        }
+      }
+      console.log(listelm) 
+    }
   }
-  // mounted () {
-  //   db.collection('user').get().then((querySnapshot) => {
-  //     querySnapshot.forEach((doc, i) => {
-  //       console.log(doc.data().age)
-  //       this.userId.push(doc.data().name)
-  //       // console.log(doc.data().name)
-  //     })
-  //   })
-  // }
 }
 </script>
 

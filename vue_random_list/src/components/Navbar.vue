@@ -1,22 +1,27 @@
 <template>
-  <nav>
-    <div id="nav" class="nav-wrapper green">
-      <div class="container">
-        <router-link to="/" class="brand-logo">Random Food List</router-link>
-        <ul class="right">
-          <li v-if="isLoggedIn"><router-link to="/">Dashboard</router-link></li>
-          <li v-if="!isLoggedIn"><router-link to="/login">Login</router-link></li>
-          <li v-if="!isLoggedIn"><router-link to="/register">Resiter</router-link></li>
-          <li v-if="isLoggedIn" v-on:click="logout">Logout</li>
-        </ul>
-      </div>
-      <!-- <ul class="row">
-        <li v-for="(menu,i) in gnb " v-bind:key="`${menu.name}-${i}`" v-bind:class="'col s2'">
-          <router-link v-bind:to="{ name: menu.name }" class="white-text">{{menu.name}}</router-link>
-        </li>
-      </ul> -->
+  <header>
+    <div class="row center top-logo green valign-wrapper">
+      <h1><router-link to="/" class="brand-logo white-text">Random Food List</router-link></h1>
     </div>
-  </nav>
+    <nav>
+      <div id="nav" class="nav-wrapper green">
+        <div class="container">
+          <ul class="right">
+            <li v-if="isLoggedIn">{{currentUser}}</li>
+            <li v-if="isLoggedIn"><router-link to="/">Dashboard</router-link></li>
+            <li v-if="!isLoggedIn"><router-link to="/login">Login</router-link></li>
+            <li v-if="!isLoggedIn"><router-link to="/register">Resiter</router-link></li>
+            <li v-if="isLoggedIn" v-on:click="logout">Logout</li>
+          </ul>
+        </div>
+      </div>
+        <!-- <ul class="row">
+          <li v-for="(menu,i) in gnb " v-bind:key="`${menu.name}-${i}`" v-bind:class="'col s2'">
+            <router-link v-bind:to="{ name: menu.name }" class="white-text">{{menu.name}}</router-link>
+          </li>
+        </ul> -->
+    </nav>
+  </header>
 </template>
 
 <script>
@@ -25,6 +30,8 @@ export default {
   name: 'navbar',
   data () {
     return {
+      inputText: '',
+      labelText: [],
       isLoggedIn: false,
       currentUser: false
     }
@@ -33,7 +40,7 @@ export default {
     console.log(firebase.auth().currentUser)
     if (firebase.auth().currentUser) {
       this.isLoggedIn = true
-      console.log(this.isLoggedIn)
+      // console.log(this.isLoggedIn)
       this.currentUser = firebase.auth().currentUser.email
     }
   },
@@ -41,16 +48,27 @@ export default {
     logout: function () {
       console.log('logout')
       firebase.auth().signOut().then(() => {
-        console.log('logout')
+        // console.log('logout')
         // this.$router.push('login')
         this.$router.go({ path: this.$router.path })
       })
+    },
+    inputTextFunc: function (e) {
+      if(e.keyCode == '13'){
+        // console.log(this.inputText)
+        this.labelText.push(this.inputText)
+        this.inputText = ''
+      }    
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+  nav {
+    webkit-box-shadow: none;
+    box-shadow: none;
+  }
   .nav-wrapper{
     ul{
       li{
