@@ -53,7 +53,8 @@ export default {
             alert(`You logined in as ${this.email}`)
             // console.log(this.user)
             // this.$router.push('/')
-            this.$router.go({ path: this.$router.path })
+            // this.$router.go()            
+            window.location.href = ''
           },
           err => {
             alert(err.message)

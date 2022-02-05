@@ -51,7 +51,8 @@ export default {
             db.collection('user').add(this.user)
             .then(() => {
               alert(`Acount created for ${this.email}`)
-              this.$router.go()
+              // this.$router.go()
+              window.location.href = ''
             })
             .catch((error) => {
               console.error(error);

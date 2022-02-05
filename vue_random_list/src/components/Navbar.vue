@@ -50,7 +50,8 @@ export default {
       firebase.auth().signOut().then(() => {
         // console.log('logout')
         // this.$router.push('login')
-        this.$router.go({ path: this.$router.path })
+        // this.$router.go()
+        window.location.href = ''
       })
     },
     inputTextFunc: function (e) {
