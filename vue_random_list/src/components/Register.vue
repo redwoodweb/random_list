@@ -3,7 +3,7 @@
     <div>
       <div class="container">
         <div class="row">
-          <div class="col s12 m8 offset-m2">
+          <div class="col s12 m10 offset-m1">
             <div class="login card-panel grey lighten-4 black-text center">
               <h3>Register</h3>
               <form>
@@ -17,7 +17,7 @@
                   <input type="password" id="password" name="" v-model="password">
                   <label class="black-text" for="password">Password</label>
                 </div>
-                <button v-on:click="register" class="btn btn-large grey lighten-4 grey-text">Register</button>
+                <button v-on:click="register" class="btn btn-large grey darken-2 white-text">Register</button>
               </form>
             </div>
           </div>
@@ -46,27 +46,31 @@ export default {
     register: function (e) {
       firebase.auth()
         .createUserWithEmailAndPassword(this.email.trim(), this.password)
-        .then(user => {
-          this.user.ep_id = this.email.trim()                
-          db.collection('user').add(this.user)
-          .then(() => {
-            alert(`Acount created for ${this.email}`)    
-            this.$router.go()
-          })
-          .catch((error) => {
-            console.error(error);
-          })
+          .then(user => {
+            this.user.ep_id = this.email.trim()
+            db.collection('user').add(this.user)
+            .then(() => {
+              alert(`Acount created for ${this.email}`)
+              this.$router.go()
+            })
+            .catch((error) => {
+              console.error(error);
+            })
           // this.$router.go({ path: this.$router.path })              
-        },
-        err => {
-          alert(err.message)
-        }
+          },
+          err => {
+            alert(err.message)
+          }
         )
-      // e.preventDefault()
+      e.preventDefault()
     }
   }
 }
 </script>
 
 <style lang="css" scoped>
+.btn {
+  display: block;
+  width: 100%;
+}
 </style>

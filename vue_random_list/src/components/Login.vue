@@ -3,8 +3,8 @@
     <div>
       <div class="container">
         <div class="row">
-          <div class="col s12 m8 offset-m2">
-            <div class="login card-panel green white-text center">
+          <div class="col s12 m10 offset-m1">
+            <div class="login card-panel gray lighten-3 black-text center">
               <h3>Login</h3>
               <form>
                 <div class="input-field">
@@ -17,7 +17,7 @@
                   <input type="password" id="password" name="" value="" v-model="password">
                   <label class="white-text" for="password">Password</label>
                 </div>
-                <button v-on:click="login" class="btn btn-large grey lighten-4 black-text">Login</button>
+                <button v-on:click="login" class="btn btn-large green white-text">Login</button>
               </form>
             </div>
           </div>
@@ -67,4 +67,8 @@ export default {
 </script>
 
 <style lang="css" scoped>
+.btn {
+  display: block;
+  width: 100%;
+}
 </style>

@@ -36,19 +36,19 @@ export default {
         list: []
       },
       inputText: '',
-      ramdomText: '텅' ,
+      ramdomText: '텅',
       isActive: false   
     }
   },
   created () {    
-    let currentUser = firebase.auth().currentUser.email    
+    let currentUser = firebase.auth().currentUser.email
     db.collection('user').get().then(querySnapshop => {
       querySnapshop.forEach(doc => {
-        if( currentUser == doc.data().ep_id ) {
+        if ( currentUser == doc.data().ep_id ) {
           this.user.ep_id = doc.data().ep_id
           this.user.list = doc.data().list
-        }
-    })
+          }
+      })
     })
   },
   mounted () {
@@ -60,12 +60,12 @@ export default {
     })
   },
   methods: {
-    inputTextFunc: function() {           
-      if( this.inputText != '' ) {      
+    inputTextFunc: function () {
+      if ( this.inputText != '' ) {      
       this.user.list.push(this.inputText)
       db.collection('user').where( 'ep_id', '==' , this.user.ep_id ).get()
-      .then( querySnapshop => {
-        querySnapshop.forEach( doc => {
+      .then(querySnapshop => {
+        querySnapshop.forEach(doc => {
           doc.ref.update(this.user)
         })
       })
@@ -77,26 +77,26 @@ export default {
       let listelm = this.user.list
       for ( const i in listelm) {
         console.log(i)
-        if( listelm[i] == text ) {
+        if ( listelm[i] == text ) {
           console.log(listelm[i]+','+text)
           listelm.splice(i,1)
         }
       }
       db.collection('user').where( 'ep_id', '==' , this.user.ep_id ).get()
-      .then( querySnapshop => {
-        querySnapshop.forEach( doc => {
-          doc.ref.update(this.user)
+      .then(querySnapshop => {
+        querySnapshop.forEach(doc => {
+            doc.ref.update(this.user)
+          })
         })
-      })      
     },
-    suffleList: function () {      
+    suffleList: function () {
       let listLength = this.user.list.length
-      let ramdomNum = Math.floor(Math.random()*listLength)
+      let ramdomNum = Math.floor(Math.random() * listLength)
       console.log(ramdomNum)
       this.ramdomText = this.user.list[ramdomNum]
       this.isActive = true
     },
-    resetList: function () {      
+    resetList: function () {
       this.ramdomText = '텅'
       this.isActive = false
     }
