@@ -1,14 +1,14 @@
 <template>
   <header>
     <div class="row center top-logo green valign-wrapper">
-      <h1><router-link to="/" class="brand-logo white-text">Random Food List</router-link></h1>
+      <h1><router-link to="/" class="brand-logo white-text">Let's Have Something</router-link></h1>
     </div>
     <nav>
       <div id="nav" class="nav-wrapper green">
         <div class="container">
-          <ul class="right">
-            <li v-if="isLoggedIn">{{currentUser}}</li>
-            <li v-if="isLoggedIn"><router-link to="/">Dashboard</router-link></li>
+          <ul class="gnb">
+            <li v-if="isLoggedIn" class="user-id">{{currentUser}}</li>
+            <!-- <li v-if="isLoggedIn"><router-link to="/">Dashboard</router-link></li> -->
             <li v-if="!isLoggedIn"><router-link to="/login">Login</router-link></li>
             <li v-if="!isLoggedIn"><router-link to="/register">Resiter</router-link></li>
             <li v-if="isLoggedIn" v-on:click="logout">Logout</li>
@@ -65,9 +65,22 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  .top-logo {
+    justify-content: center;
+  }
   nav {
     webkit-box-shadow: none;
     box-shadow: none;
+    .gnb {
+      display: flex;
+      justify-content: center;
+      li {
+      margin-right: 10px;
+      &:last-of-type(1) {
+        margin-right: 0;
+      }
+    }
+    }
   }
   .nav-wrapper{
     ul{

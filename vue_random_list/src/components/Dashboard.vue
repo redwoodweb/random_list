@@ -4,13 +4,19 @@
       <input id="first_name" type="text" v-model="inputText" v-on:keyup.enter="inputTextFunc">
       <label for="first_name">First Name</label>
     </div>
-    <div>{{inputText}}</div>
-    <ul class="collection with-header">
-      <li class="collection-header">
+    <div class="row">
+      <div id="ramdomtext" v-bind:class="{'on': isActive}">{{ramdomText}}</div>
+      <div class="row">
+        <a v-on:click="suffleList" class="col s6 waves-effect waves-light btn center-text suffle-btn green"><i class="material-icons left">swap_vert</i>SUFFLE</a>
+        <a v-on:click="resetList" class="col s6 waves-effect waves-light btn center-text reset-btn grey lighten-4 black-text"><i class="material-icons left">reply_all</i>RESET</a>
+      </div>  
+    </div>
+    <ul class="collection">
+      <!-- <li class="collection-header">
         <h4>food list</h4>
-      </li>
-      <li v-for="(items,i) in user.list" v-bind:key="items.id" class="collection-item">
-        <div class="chip">{{i}}{{items}}<i class="close material-icons" v-on:click="removeList(`${items}`)">close</i></div>
+      </li> -->
+      <li class="collection-item">
+        <div v-for="items in user.list" v-bind:key="items.id" class="chip">{{items}}<i class="close-btn material-icons" v-on:click="removeList(`${items}`)">close</i></div>
       </li>
     </ul>
     <div class="fixed-action-btn">
@@ -29,7 +35,9 @@ export default {
         ep_id: null,
         list: []
       },
-      inputText: ''      
+      inputText: '',
+      ramdomText: '텅' ,
+      isActive: false   
     }
   },
   created () {    
@@ -53,7 +61,7 @@ export default {
   },
   methods: {
     inputTextFunc: function() {           
-      if( this.inputText != '' ) {
+      if( this.inputText != '' ) {      
       this.user.list.push(this.inputText)
       db.collection('user').where( 'ep_id', '==' , this.user.ep_id ).get()
       .then( querySnapshop => {
@@ -74,7 +82,23 @@ export default {
           listelm.splice(i,1)
         }
       }
-      console.log(listelm) 
+      db.collection('user').where( 'ep_id', '==' , this.user.ep_id ).get()
+      .then( querySnapshop => {
+        querySnapshop.forEach( doc => {
+          doc.ref.update(this.user)
+        })
+      })      
+    },
+    suffleList: function () {      
+      let listLength = this.user.list.length
+      let ramdomNum = Math.floor(Math.random()*listLength)
+      console.log(ramdomNum)
+      this.ramdomText = this.user.list[ramdomNum]
+      this.isActive = true
+    },
+    resetList: function () {      
+      this.ramdomText = '텅'
+      this.isActive = false
     }
   }
 }
@@ -82,9 +106,37 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
-  .collection-item {
-    a.secondary-content {
-      line-height: 38px;
+  .collection {
+    margin: 0.5rem 0;
+    border: 0;
+    .collection-item {
+      background: none;
+      border: 0;
+      padding: 0;
+      a.secondary-content {
+        line-height: 38px;
+      }
+    }
+  }
+  .suffle-btn, .reset-btn {
+    display: block;
+    line-height: 5rem;
+    height: 5rem;
+    font-size: 1.5rem;
+    i.material-icons {
+      font-size: 1.7rem;
+    }
+  }
+  #ramdomtext {
+    font-size: 5rem;
+    font-weight: 700;
+    color: #c2c2c2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 15rem;
+    &.on {
+      color: #048d64;
     }
   }
 </style>

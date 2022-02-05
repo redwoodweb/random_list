@@ -21,6 +21,7 @@ export default {
 </script>
 <style lang="scss">
 @charset "UTF-8";
+@import "./assets/scss/font";
 @import "./assets/scss/common";
 @import "./assets/scss/initial";
 </style>
