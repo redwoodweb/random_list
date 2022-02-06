@@ -17,7 +17,7 @@
                   <input type="password" id="password" name="" value="" v-model="password">
                   <label class="white-text" for="password">Password</label>
                 </div>
-                <button v-on:click="login" class="btn btn-large green white-text">Login</button>
+                <button v-on:click="login" class="btn btn-large pink accent-3 white-text">Login</button>
               </form>
             </div>
           </div>

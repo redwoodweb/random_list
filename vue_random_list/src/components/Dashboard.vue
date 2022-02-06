@@ -128,6 +128,7 @@ export default {
     bottom: 0;
     left: 0;
     width: 100%;
+    z-index: 555;
     @media screen and ( min-width: 601px ) {      
       width: 80%;
       left: 50%;
