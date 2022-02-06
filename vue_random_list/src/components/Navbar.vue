@@ -1,8 +1,8 @@
 <template>
   <header>
-    <div class="row center top-logo green valign-wrapper">
+    <!-- <div class="row center top-logo green valign-wrapper">
       <h1><router-link to="/" class="brand-logo white-text">Let's Have Something</router-link></h1>
-    </div>
+    </div> -->
     <nav>
       <div id="nav" class="nav-wrapper green">
         <div class="container">
@@ -91,5 +91,9 @@ export default {
         }
       }
     }
+  }
+  .cotainer {
+    overflow: hidden;
+    height: calc( 100vh - 64px );
   }
 </style>

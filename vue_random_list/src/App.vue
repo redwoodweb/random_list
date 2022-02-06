@@ -22,6 +22,8 @@ export default {
 <style lang="scss">
 @charset "UTF-8";
 @import "./assets/scss/font";
-@import "./assets/scss/common";
 @import "./assets/scss/initial";
+@import "./assets/scss/general_ui";
+@import "./assets/scss/common";
+
 </style>

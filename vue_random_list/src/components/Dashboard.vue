@@ -1,8 +1,11 @@
 <template>
   <div class="intro contents">
-    <div class="input-field col s12">
-      <input id="first_name" type="text" v-model="inputText" v-on:keyup.enter="inputTextFunc">
-      <label for="first_name">First Name</label>
+    <div class="row">
+      <div class="input-field col s10">
+        <input id="input_text" type="text" v-model="inputText" v-on:keyup.enter="inputTextFunc">
+        <label for="input_text">input your text</label>
+      </div>
+      <button class="btn large green col s2" v-on:click="inputTextFunc"><i class="fa fa-plus"></i></button>
     </div>
     <ul class="collection">
       <li class="collection-item">
@@ -12,13 +15,13 @@
     <div class="row">
       <div id="ramdomtext" v-bind:class="{'on': isActive}">{{ramdomText}}</div>
       <div class="row">
-        <a v-on:click="suffleList" class="col s6 waves-effect waves-light btn center-text suffle-btn green"><i class="material-icons left">swap_vert</i>SUFFLE</a>
-        <a v-on:click="resetList" class="col s6 waves-effect waves-light btn center-text reset-btn grey lighten-4 black-text"><i class="material-icons left">reply_all</i>RESET</a>
+        <a v-on:click="suffleList" class="col s5 offset-s1 waves-effect waves-light btn center-text suffle-btn green">SUFFLE</a>
+        <a v-on:click="resetList" class="col s5 offset-s1 waves-effect waves-light btn center-text reset-btn grey lighten-4 black-text">RESET</a>
       </div>  
     </div>
-    <div class="fixed-action-btn">
+    <!-- <div class="fixed-action-btn">
       <button class="btn-floating btn-large red" v-on:click="inputTextFunc"><i class="fa fa-plus"></i></button>
-    </div>
+    </div> -->
   </div>
 </template>
 <script>
@@ -68,6 +71,7 @@ export default {
       })
       }
       this.inputText = ''
+      this.$el.querySellector('#nput_text + label').classList.removeClass = 'active'
     },
     removeList: function (text) {
       console.log(text)
@@ -120,8 +124,42 @@ export default {
     line-height: 5rem;
     height: 5rem;
     font-size: 1.5rem;
+    border-radius: 2.5rem;
     i.material-icons {
       font-size: 1.7rem;
+    }
+  }
+  .input-field {
+    padding: 0;
+    & > label:not(.label-icon).active {
+      -webkit-transform: translate(0px, 0px) scale(0.5);
+      transform: translate(0px, 0px) scale(0.5);
+      -webkit-transform-origin: 0 0;
+      transform-origin: 0 0;
+    }  
+    input,label {
+      height: 5rem;
+      font-size: 2rem;
+    }
+    label {
+      left: 2rem;
+    }
+    input {
+      display: inline-block;
+      box-sizing: border-box;
+      padding: 0 2rem;
+      border: 1px solid #9e9e9e;
+      border-right: 0px;
+      border-radius: 2.5rem 0 0 2.5rem;      
+    }
+    & + button {
+      margin: 1rem 0;
+      height: 5rem;
+      font-size: 2rem;
+      border-radius: 0 2.5rem 2.5rem 0;
+      i {
+        font-size: 2rem;
+      }
     }
   }
   #ramdomtext {
