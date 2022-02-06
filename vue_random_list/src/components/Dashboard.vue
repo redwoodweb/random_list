@@ -4,6 +4,11 @@
       <input id="first_name" type="text" v-model="inputText" v-on:keyup.enter="inputTextFunc">
       <label for="first_name">First Name</label>
     </div>
+    <ul class="collection">
+      <li class="collection-item">
+        <div v-for="items in user.list" v-bind:key="items.id" class="chip">{{items}}<i class="close-btn material-icons" v-on:click="removeList(`${items}`)">close</i></div>
+      </li>
+    </ul>
     <div class="row">
       <div id="ramdomtext" v-bind:class="{'on': isActive}">{{ramdomText}}</div>
       <div class="row">
@@ -11,14 +16,6 @@
         <a v-on:click="resetList" class="col s6 waves-effect waves-light btn center-text reset-btn grey lighten-4 black-text"><i class="material-icons left">reply_all</i>RESET</a>
       </div>  
     </div>
-    <ul class="collection">
-      <!-- <li class="collection-header">
-        <h4>food list</h4>
-      </li> -->
-      <li class="collection-item">
-        <div v-for="items in user.list" v-bind:key="items.id" class="chip">{{items}}<i class="close-btn material-icons" v-on:click="removeList(`${items}`)">close</i></div>
-      </li>
-    </ul>
     <div class="fixed-action-btn">
       <button class="btn-floating btn-large red" v-on:click="inputTextFunc"><i class="fa fa-plus"></i></button>
     </div>
