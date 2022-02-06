@@ -125,10 +125,13 @@ export default {
   }
   .btn-group {
     position: fixed;
+    height: 5rem;
     bottom: 0;
     left: 0;
     width: 100%;
     z-index: 555;
+    margin-bottom: 0;
+    background: rgba( 252, 228, 236, .8);
     @media screen and ( min-width: 601px ) {      
       width: 80%;
       left: 50%;
