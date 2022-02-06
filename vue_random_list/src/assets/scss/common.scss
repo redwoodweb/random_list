@@ -1,20 +1,14 @@
+body{
+  background: #fce4ec;
+}
 #app {
-  // font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  // -webkit-font-smoothing: antialiased;
-  // -moz-osx-font-smoothing: grayscale;
-  // text-align: center;
-  // #nav {
-  //   height: 60px;
-  //   a {
-  //     line-height: 60px;
-  //   }
-  // }
-  // & > .contents {
-  //   height: calc( 100vh - 120px );
-  // }
-  // & > .container {
-  //   width: 100%;
-  // }
+  top: 0;
+  right: 0;
+  bottom: 8rem;
+  left: 0;  
+  box-sizing: border-box;  
+  position: fixed;
+  overflow-y: auto;  
   .chip {
     .close-btn {
     cursor: pointer;

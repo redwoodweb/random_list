@@ -4,7 +4,7 @@
       <h1><router-link to="/" class="brand-logo white-text">Let's Have Something</router-link></h1>
     </div> -->
     <nav>
-      <div id="nav" class="nav-wrapper green">
+      <div id="nav" class="nav-wrapper">
         <div class="container">
           <ul class="gnb">
             <li v-if="isLoggedIn" class="user-id">{{currentUser}}</li>
@@ -70,6 +70,8 @@ export default {
     justify-content: center;
   }
   nav {
+    color: #999999;
+    background: none;
     webkit-box-shadow: none;
     box-shadow: none;
     .gnb {
