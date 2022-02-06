@@ -10,12 +10,12 @@
                 <div class="input-field">
                   <i class="material-icons prefix">email</i>
                   <input type="email" id="email" name="" value="" v-model="email">
-                  <label class="white-text" for="email">Email</label>
+                  <label class="black-text" for="email">Email</label>
                 </div>
                 <div class="input-field">
                   <i class="material-icons prefix">lock</i>
                   <input type="password" id="password" name="" value="" v-model="password">
-                  <label class="white-text" for="password">Password</label>
+                  <label class="black-text" for="password">Password</label>
                 </div>
                 <button v-on:click="login" class="btn btn-large pink accent-3 white-text">Login</button>
               </form>

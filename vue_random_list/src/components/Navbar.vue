@@ -78,9 +78,15 @@ export default {
       display: flex;
       justify-content: center;
       li {
-      margin-right: 10px;
+      margin-right: 10px;      
       &:last-of-type(1) {
         margin-right: 0;
+      }
+      a {
+        color: #999999;
+        &:hover {
+          background: transparent;
+        }
       }
     }
     }
