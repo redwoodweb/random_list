@@ -29,7 +29,7 @@
 
 <script>
 import firebase from 'firebase'
-import {db} from './firebaseset'
+// import {db} from './firebaseset'
 export default {
   name: 'register',
   data () {
@@ -53,14 +53,13 @@ export default {
             alert(`You logined in as ${this.email}`)
             // console.log(this.user)
             // this.$router.push('/')
-            // this.$router.go()            
+            // this.$router.go()
             window.location.href = ''
           },
           err => {
             alert(err.message)
           }
         )
-
       e.preventDefault()
     }
   }

@@ -20,8 +20,8 @@
         </div>
         <div class="col s6">
           <a v-on:click="resetList" class="waves-effect waves-light btn center-text reset-btn grey darken-1 white-text">RESET</a>
-        </div>              
-      </div>  
+        </div>
+      </div>
     </div>
     <!-- <div class="fixed-action-btn">
       <button class="btn-floating btn-large red" v-on:click="inputTextFunc"><i class="fa fa-plus"></i></button>
@@ -35,23 +35,23 @@ export default {
   name: 'DashBoard',
   data () {
     return {
-      user:{
+      user: {
         ep_id: null,
         list: []
       },
       inputText: '',
       ramdomText: '텅',
-      isActive: false   
+      isActive: false
     }
   },
-  created () {    
+  created () {
     let currentUser = firebase.auth().currentUser.email
     db.collection('user').get().then(querySnapshop => {
       querySnapshop.forEach(doc => {
-        if ( currentUser == doc.data().ep_id ) {
+        if (currentUser === doc.data().ep_id) {
           this.user.ep_id = doc.data().ep_id
           this.user.list = doc.data().list
-          }
+        }
       })
     })
   },
@@ -65,14 +65,14 @@ export default {
   },
   methods: {
     inputTextFunc: function () {
-      if ( this.inputText != '' ) {      
-      this.user.list.push(this.inputText)
-      db.collection('user').where( 'ep_id', '==' , this.user.ep_id ).get()
-      .then(querySnapshop => {
-        querySnapshop.forEach(doc => {
-          doc.ref.update(this.user)
-        })
-      })
+      if (this.inputText !== '') {
+        this.user.list.push(this.inputText)
+        db.collection('user').where('ep_id', '==', this.user.ep_id).get()
+          .then(querySnapshop => {
+            querySnapshop.forEach(doc => {
+              doc.ref.update(this.user)
+            })
+          })
       }
       this.inputText = ''
       this.$el.querySellector('#nput_text + label').classList.removeClass = 'active'
@@ -80,16 +80,16 @@ export default {
     removeList: function (text) {
       console.log(text)
       let listelm = this.user.list
-      for ( const i in listelm) {
+      for (const i in listelm) {
         console.log(i)
-        if ( listelm[i] == text ) {
-          console.log(listelm[i]+','+text)
-          listelm.splice(i,1)
+        if (listelm[i] === text) {
+          console.log(listelm[i] + ',' + text)
+          listelm.splice(i, 1)
         }
       }
-      db.collection('user').where( 'ep_id', '==' , this.user.ep_id ).get()
-      .then(querySnapshop => {
-        querySnapshop.forEach(doc => {
+      db.collection('user').where('ep_id', '==', this.user.ep_id).get()
+        .then(querySnapshop => {
+          querySnapshop.forEach(doc => {
             doc.ref.update(this.user)
           })
         })
@@ -132,7 +132,7 @@ export default {
     z-index: 555;
     margin-bottom: 0;
     background: rgba( 252, 228, 236, .8);
-    @media screen and ( min-width: 601px ) {      
+    @media screen and ( min-width: 601px ) {
       width: 80%;
       left: 50%;
       transform: translateX( -50% );
@@ -141,7 +141,7 @@ export default {
       width: 70%;
       left: 50%;
       transform: translateX( -50% );
-    }  
+    }
   }
   .suffle-btn, .reset-btn {
     display: block;
@@ -151,10 +151,10 @@ export default {
     border-radius: 2.5rem;
     i.material-icons {
       font-size: 1.7rem;
-    }
+      }
   }
   .reset-btn {
-    color: #999999;    
+    color: #999999;
   }
   .input-field {
     padding: 0;
@@ -163,7 +163,7 @@ export default {
       transform: translate(0px, 0px) scale(0.4);
       -webkit-transform-origin: 0 0;
       transform-origin: 0 0;
-    }  
+    }
     input,label {
       height: 5rem;
       font-size: 2rem;
@@ -178,16 +178,16 @@ export default {
       padding: 0 2rem;
       border: 1px solid #9e9e9e;
       border-right: 0px;
-      border-radius: 1rem 0 0 1rem;      
-    }
-    & + button {
+      border-radius: 1rem 0 0 1rem;
+      }
+      & + button {
       margin: 1rem 0;
       height: 5rem;
       font-size: 2rem;
       border-radius: 0 1rem 1rem 0;
       i {
         font-size: 2rem;
-      }
+        }
     }
   }
   #ramdomtext {
@@ -199,8 +199,8 @@ export default {
     align-items: center;
     min-height: 15rem;
     &.on {
-      color: #ff4081;;
-    }
+      color: #ff4081;
+      }
   }
   input:not([type]):focus:not([readonly]), input[type=text]:not(.browser-default):focus:not([readonly]), input[type=password]:not(.browser-default):focus:not([readonly]), input[type=email]:not(.browser-default):focus:not([readonly]), input[type=url]:not(.browser-default):focus:not([readonly]), input[type=time]:not(.browser-default):focus:not([readonly]), input[type=date]:not(.browser-default):focus:not([readonly]), input[type=datetime]:not(.browser-default):focus:not([readonly]), input[type=datetime-local]:not(.browser-default):focus:not([readonly]), input[type=tel]:not(.browser-default):focus:not([readonly]), input[type=number]:not(.browser-default):focus:not([readonly]), input[type=search]:not(.browser-default):focus:not([readonly]), textarea.materialize-textarea:focus:not([readonly]) {
     border: 1px solid #26a69a;

@@ -55,11 +55,11 @@ export default {
       })
     },
     inputTextFunc: function (e) {
-      if(e.keyCode == '13'){
+      if (e.keyCode === '13') {
         // console.log(this.inputText)
         this.labelText.push(this.inputText)
         this.inputText = ''
-      }    
+      }
     }
   }
 }
@@ -78,7 +78,7 @@ export default {
       display: flex;
       justify-content: center;
       li {
-      margin-right: 10px;      
+      margin-right: 10px;
       &:last-of-type(1) {
         margin-right: 0;
       }

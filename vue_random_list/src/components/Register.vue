@@ -46,23 +46,22 @@ export default {
     register: function (e) {
       firebase.auth()
         .createUserWithEmailAndPassword(this.email.trim(), this.password)
-          .then(user => {
-            this.user.ep_id = this.email.trim()
-            db.collection('user').add(this.user)
+        .then(user => {
+          this.user.ep_id = this.email.trim()
+          db.collection('user').add(this.user)
             .then(() => {
               alert(`Acount created for ${this.email}`)
               // this.$router.go()
               window.location.href = ''
             })
             .catch((error) => {
-              console.error(error);
+              console.error(error)
             })
-          // this.$router.go({ path: this.$router.path })              
-          },
-          err => {
-            alert(err.message)
-          }
-        )
+          // this.$router.go({ path: this.$router.path })
+        },
+        err => {
+          alert(err.message)
+        })
       e.preventDefault()
     }
   }
