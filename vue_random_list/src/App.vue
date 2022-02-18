@@ -23,6 +23,7 @@ export default {
 @charset "UTF-8";
 @import "./assets/scss/font";
 @import "./assets/scss/initial";
+@import "./assets/scss/components/select_box";
 @import "./assets/scss/general_ui";
 @import "./assets/scss/common";
 

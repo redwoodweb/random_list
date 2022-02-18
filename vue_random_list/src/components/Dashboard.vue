@@ -1,5 +1,15 @@
 <template>
   <div class="intro contents">
+    <div class="row">    
+      <div class="dropdown" v-on:click="dropdown()">
+        <div class="content">
+          <input type="text" disabled>
+          <div class="inner">            
+            <div v-for="li in cate" v-bind:key="li" class="option" v-on:click="show(li)">{{li}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="row">
       <div class="input-field col s8 m10">
         <input id="input_text" type="text" v-model="inputText" v-on:keyup.enter="inputTextFunc">
@@ -39,9 +49,11 @@ export default {
         ep_id: null,
         list: []
       },
+      cate: ['html', 'css', 'javascript', 'node.js'],
       inputText: '',
       ramdomText: '텅',
-      isActive: false
+      isActive: false,
+      selectElem: null
     }
   },
   created () {
@@ -104,6 +116,14 @@ export default {
     resetList: function () {
       this.ramdomText = '텅'
       this.isActive = false
+    },
+    show: function (elem) {
+      console.log(elem)
+      document.querySelector('input').value = elem
+      
+    },
+    dropdown: function(){                  
+      document.querySelector('.dropdown').classList.toggle('active')
     }
   }
 }
