@@ -16,21 +16,21 @@ input {
     content: '';
     position: absolute;
     right: 10px;
-    top: 3px;
+    top: 50%;    
     width: 10px;
     height: 10px;
     border: 2px solid black;
     border-top-color: transparent;
     border-right-color: transparent;
     transform-origin: center;
-    transform: rotate(-45deg);
+    transform: translateY(-50%) rotate(-45deg);
     transition: .3s;
     z-index: 100;
   }
   &.active {
       &::before {
-        top: 10px;
-        transform: rotate(-225deg);
+        top: calc(50% + 3px);
+        transform: translateY(-50%) rotate(-225deg);
       }
       .content{
         .inner {
@@ -38,8 +38,13 @@ input {
           }
       }
   }
-  input {      
+  input[type=text] {
       width: 100%;
+      color: #666666;
+      font-size: 21px;    
+      &::placeholder {
+          color: #999999;
+      }
   }
   .content{  
     position: relative;  

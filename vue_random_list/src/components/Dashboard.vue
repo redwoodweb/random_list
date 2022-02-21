@@ -1,10 +1,10 @@
 <template>
   <div class="intro contents">
-    <div class="row">    
+    <div class="row">
       <div class="dropdown" v-on:click="dropdown()">
         <div class="content">
-          <input type="text" disabled>
-          <div class="inner">            
+          <input type="text" placeholder="select your category" disabled>
+          <div class="inner">
             <div v-for="li in cate" v-bind:key="li" class="option" v-on:click="show(li)">{{li}}</div>
           </div>
         </div>
@@ -120,9 +120,8 @@ export default {
     show: function (elem) {
       console.log(elem)
       document.querySelector('input').value = elem
-      
     },
-    dropdown: function(){                  
+    dropdown: function () {
       document.querySelector('.dropdown').classList.toggle('active')
     }
   }
