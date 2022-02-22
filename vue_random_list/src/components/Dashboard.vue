@@ -1,9 +1,16 @@
 <template>
   <div class="intro contents">
+    <div class="random-box-wrap" v-bind:class="{'on': isVisible}">
+      <div class="inner">
+        <div ref="randombox" class="randombox">
+          <div v-for="(items, i) in mlist" v-bind:key="i">{{items}}</div>        
+        </div>
+      </div>
+    </div>
     <div class="row">
-      <div class="dropdown" v-on:click="dropdown()">
+      <div class="dropdown" v-on:click="dropDown()">
         <div class="content">
-          <input type="text" placeholder="select your category" disabled>
+          <input type="text" placeholder="" disabled  v-bind:value='currentCate'>
           <div class="inner">
             <div v-for="li in cate" v-bind:key="li" class="option" v-on:click="show(li)">{{li}}</div>
           </div>
@@ -12,14 +19,14 @@
     </div>
     <div class="row">
       <div class="input-field col s8 m10">
-        <input id="input_text" type="text" v-model="inputText" v-on:keyup.enter="inputTextFunc">
-        <label for="input_text">input your text</label>
+        <input ref="inputText" id="input_text" type="text" v-model="inputText" v-on:keyup.enter="inputTextFunc">
+        <label ref="labelText" for="input_text">input your text</label>
       </div>
       <button class="btn large pink accent-3 col s4 m2" v-on:click="inputTextFunc"><i class="fa fa-plus"></i></button>
     </div>
     <ul class="collection">
       <li class="collection-item">
-        <div v-for="items in user.list" v-bind:key="items.id" class="chip pink accent-2 white-text">{{items}}<i class="close-btn material-icons" v-on:click="removeList(`${items}`)">close</i></div>
+        <div v-for="items in mlist" v-bind:key="items.id" class="chip pink accent-2 white-text">{{items}}<i class="close-btn material-icons" v-on:click="removeList(`${items}`)">close</i></div>
       </li>
     </ul>
     <div class="row">
@@ -49,11 +56,14 @@ export default {
         ep_id: null,
         list: []
       },
-      cate: ['html', 'css', 'javascript', 'node.js'],
+      currentCate: 'mymenu',
+      cate: [],
       inputText: '',
       ramdomText: '텅',
       isActive: false,
-      selectElem: null
+      selectElem: null,
+      mlist: [],
+      isVisible: false    
     }
   },
   created () {
@@ -63,6 +73,26 @@ export default {
         if (currentUser === doc.data().ep_id) {
           this.user.ep_id = doc.data().ep_id
           this.user.list = doc.data().list
+          console.log(doc.data().list)
+          // 카테고리 목록 가져오기
+          for( const items in doc.data().list){
+            console.log(items)
+          }
+          for (const [key] of Object.entries(doc.data().list)) {
+            this.cate.push(key)
+            console.log("카테고리모음"+this.cate)
+          }
+          // 현재 카테고리에 할당
+          // this.currentCate = this.cate[0]
+          // console.log(this.user.list)
+          // 현재 카테고리에 매칭된 데이터 가져오기
+          for (const [key, value] of Object.entries(doc.data().list)) {
+            if (key === this.currentCate) {
+              value.forEach(val => {
+                this.mlist.push(val)
+              })
+            }
+          }
         }
       })
     })
@@ -78,7 +108,12 @@ export default {
   methods: {
     inputTextFunc: function () {
       if (this.inputText !== '') {
-        this.user.list.push(this.inputText)
+        this.mlist.push(this.inputText)
+        for (const [key, value] of Object.entries(this.user.list)) {
+          if (key === this.currentCate) {
+            value.push(this.inputText)
+          }
+        }
         db.collection('user').where('ep_id', '==', this.user.ep_id).get()
           .then(querySnapshop => {
             querySnapshop.forEach(doc => {
@@ -87,7 +122,8 @@ export default {
           })
       }
       this.inputText = ''
-      this.$el.querySellector('#nput_text + label').classList.removeClass = 'active'
+      this.$refs.inputText.blur()
+      this.$refs.labelText.classList.remove('active')
     },
     removeList: function (text) {
       console.log(text)
@@ -99,6 +135,16 @@ export default {
           listelm.splice(i, 1)
         }
       }
+      for (const [key, value] of Object.entries(this.user.list)) {
+        if (key === this.currentCate) {
+          for (const i in value) {
+            if (value[i] === text) {
+              value.splice(i, 1)
+              this.mlist = value
+            }
+          }
+        }
+      }
       db.collection('user').where('ep_id', '==', this.user.ep_id).get()
         .then(querySnapshop => {
           querySnapshop.forEach(doc => {
@@ -107,11 +153,23 @@ export default {
         })
     },
     suffleList: function () {
-      let listLength = this.user.list.length
+      let listLength = this.mlist.length
       let ramdomNum = Math.floor(Math.random() * listLength)
       console.log(ramdomNum)
-      this.ramdomText = this.user.list[ramdomNum]
+      this.ramdomText = this.mlist[ramdomNum]
       this.isActive = true
+      this.isVisible = true
+      this.$refs.randombox.classList.add('animation')
+      let t = setTimeout(() => {
+        this.$refs.randombox.classList.remove('animation')
+        this.$refs.randombox.classList.add('transition')
+        this.$refs.randombox.style.transform = "translateY("+ramdomNum*20*(-1)+"vh)"
+        let getBack = setTimeout(() => {
+          this.isVisible = false
+          this.$refs.randombox.classList.remove('transition')
+          this.$refs.randombox.style.transform = "translateY(0vh)"
+        },1000)
+      },1000)
     },
     resetList: function () {
       this.ramdomText = '텅'
@@ -119,9 +177,30 @@ export default {
     },
     show: function (elem) {
       console.log(elem)
-      document.querySelector('input').value = elem
+      document.querySelector('input').value = elem      
+      let currentUser = firebase.auth().currentUser.email
+      db.collection('user').get().then(querySnapshop => {
+        querySnapshop.forEach(doc => {
+          if (currentUser === doc.data().ep_id) {
+            this.user.ep_id = doc.data().ep_id
+            this.user.list = doc.data().list
+            console.log(doc.data().list)
+            // 현재 카테고리에 할당
+            this.currentCate = elem
+            console.log(this.user.list)
+            // 현재 카테고리에 매칭된 데이터 가져오기
+            for (const [key, value] of Object.entries(doc.data().list)) {
+              if (key === this.currentCate) {
+                this.mlist = value
+              }
+            }
+          }
+        })
+        this.ramdomText = '텅'
+        this.isActive = false
+      }) 
     },
-    dropdown: function () {
+    dropDown: function () {
       document.querySelector('.dropdown').classList.toggle('active')
     }
   }

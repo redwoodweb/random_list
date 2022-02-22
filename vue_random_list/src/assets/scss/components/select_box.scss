@@ -52,7 +52,8 @@ input {
     .inner {
         position: absolute;
         top: 50px; 
-        width: inherit;       
+        width: inherit;    
+        overflow: hidden;   
         box-shadow: 0 0 5px rgba(0,0,0,.2);    
         box-sizing: border-box;
         border-radius: 5px;
@@ -67,6 +68,6 @@ input {
   transition: .3s;
   &:hover{
     color: white;
-    background: #31c0e8;
+    background: #f50057;
   }
 }
