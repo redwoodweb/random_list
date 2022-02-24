@@ -37,7 +37,7 @@ export default {
     }
   },
   created () {
-    console.log(firebase.auth().currentUser)
+    // console.log(firebase.auth().currentUser)
     if (firebase.auth().currentUser) {
       this.isLoggedIn = true
       // console.log(this.isLoggedIn)
@@ -46,7 +46,7 @@ export default {
   },
   methods: {
     logout: function () {
-      console.log('logout')
+      // console.log('logout')
       firebase.auth().signOut().then(() => {
         // console.log('logout')
         // this.$router.push('login')
