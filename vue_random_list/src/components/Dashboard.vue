@@ -3,7 +3,7 @@
     <div class="random-box-wrap" v-bind:class="{'on': isVisible}">
       <div class="inner">
         <div ref="randombox" class="randombox">
-          <div v-for="(items, i) in mlist" v-bind:key="i">{{items}}</div>        
+          <div v-for="(items, i) in mlist" v-bind:key="i">{{items}}</div>
         </div>
       </div>
     </div>
@@ -63,7 +63,9 @@ export default {
       isActive: false,
       selectElem: null,
       mlist: [],
-      isVisible: false    
+      isVisible: false,
+      timeOutId: null,
+      count: 0
     }
   },
   created () {
@@ -73,14 +75,14 @@ export default {
         if (currentUser === doc.data().ep_id) {
           this.user.ep_id = doc.data().ep_id
           this.user.list = doc.data().list
-          console.log(doc.data().list)
+          // console.log(doc.data().list)
           // 카테고리 목록 가져오기
-          for( const items in doc.data().list){
-            console.log(items)
-          }
+          // for( const items in doc.data().list){
+          //   console.log(items)
+          // }
           for (const [key] of Object.entries(doc.data().list)) {
             this.cate.push(key)
-            console.log("카테고리모음"+this.cate)
+            // console.log("카테고리모음"+this.cate)
           }
           // 현재 카테고리에 할당
           // this.currentCate = this.cate[0]
@@ -126,12 +128,12 @@ export default {
       this.$refs.labelText.classList.remove('active')
     },
     removeList: function (text) {
-      console.log(text)
+      // console.log(text)
       let listelm = this.user.list
       for (const i in listelm) {
-        console.log(i)
+        // console.log(i)
         if (listelm[i] === text) {
-          console.log(listelm[i] + ',' + text)
+          // console.log(listelm[i] + ',' + text)
           listelm.splice(i, 1)
         }
       }
@@ -152,42 +154,55 @@ export default {
           })
         })
     },
+    aniFunc: function () {
+      let addNum = 20
+      this.timeOutId = window.setTimeout(() => {
+        if (this.mlist.length === this.count) {
+          this.count = 0
+        }
+        addNum += this.count * 20 * (-1)// 첫번째 메뉴일때 하단에서 올라오는 효과 주기  settimeout이 종료될때 항상 count 0으로 종료되기때문
+        this.$refs.randombox.style.transform = 'translateY(' + addNum + 'vh)'
+        this.count += 1 //  count 1추가 후 종료 cleartimeout 이후 아래코드에서 count 출력 시 기존 현재 카운터 보다 1 많음
+        this.aniFunc()
+      }, 80)
+    },
     suffleList: function () {
       let listLength = this.mlist.length
-      let ramdomNum = Math.floor(Math.random() * listLength)
-      console.log(ramdomNum)
-      this.ramdomText = this.mlist[ramdomNum]
+      let randomNum = Math.floor(Math.random() * listLength)
+      // console.log("index:"+randomNum)
       this.isActive = true
       this.isVisible = true
-      this.$refs.randombox.classList.add('animation')
-      let t = setTimeout(() => {
-        this.$refs.randombox.classList.remove('animation')
+      this.aniFunc()
+      window.setTimeout(() => {
+        clearTimeout(this.timeOutId)
         this.$refs.randombox.classList.add('transition')
-        this.$refs.randombox.style.transform = "translateY("+ramdomNum*20*(-1)+"vh)"
-        let getBack = setTimeout(() => {
-          this.isVisible = false
-          this.$refs.randombox.classList.remove('transition')
-          this.$refs.randombox.style.transform = "translateY(0vh)"
-        },1000)
-      },1000)
+        // console.log(this.$refs.randombox.style.transform)
+        this.$refs.randombox.style.transform = 'translateY(' + randomNum * 20 * (-1) + 'vh)'
+      }, 800)
+      window.setTimeout(() => {
+        this.isVisible = false
+        this.count = 0
+        this.$refs.randombox.classList.remove('transition')
+        this.$refs.randombox.style.transform = 'translateY(0vh)'
+        this.ramdomText = this.mlist[randomNum]
+      }, 2500)
     },
     resetList: function () {
       this.ramdomText = '텅'
       this.isActive = false
     },
     show: function (elem) {
-      console.log(elem)
-      document.querySelector('input').value = elem      
+      document.querySelector('input').value = elem
       let currentUser = firebase.auth().currentUser.email
       db.collection('user').get().then(querySnapshop => {
         querySnapshop.forEach(doc => {
           if (currentUser === doc.data().ep_id) {
             this.user.ep_id = doc.data().ep_id
             this.user.list = doc.data().list
-            console.log(doc.data().list)
+            // console.log(doc.data().list)
             // 현재 카테고리에 할당
             this.currentCate = elem
-            console.log(this.user.list)
+            // console.log(this.user.list)
             // 현재 카테고리에 매칭된 데이터 가져오기
             for (const [key, value] of Object.entries(doc.data().list)) {
               if (key === this.currentCate) {
@@ -198,7 +213,7 @@ export default {
         })
         this.ramdomText = '텅'
         this.isActive = false
-      }) 
+      })
     },
     dropDown: function () {
       document.querySelector('.dropdown').classList.toggle('active')
@@ -295,7 +310,8 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 15rem;
+    min-height: 10rem;
+    text-align: center;
     &.on {
       color: #ff4081;
       }
