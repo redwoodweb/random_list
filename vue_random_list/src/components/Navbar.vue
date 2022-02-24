@@ -72,7 +72,6 @@ export default {
   nav {
     color: #999999;
     background: none;
-    webkit-box-shadow: none;
     box-shadow: none;
     .gnb {
       display: flex;
