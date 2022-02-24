@@ -1,8 +1,5 @@
 <template>
   <div class="intro contents">
-    <div class="fixed-action-btn">
-      <router-link v-bind:to="{ name: 'editcate', params: {employee_id: user.ep_id}}" class="btn-floating btn-large red"><i class="fa fa-pencil"></i></router-link>
-    </div>
     <div class="random-box-wrap" v-bind:class="{'on': isVisible}">
       <div class="inner">
         <div ref="randombox" class="randombox">

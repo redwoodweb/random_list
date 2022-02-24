@@ -38,7 +38,7 @@ export default {
       password: '',
       user: {
         ep_id: null,
-        list: {mymenu: []}
+        list: []
       }
     }
   },
