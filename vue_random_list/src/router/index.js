@@ -2,11 +2,12 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import DashBoard from '@/components/DashBoard'
 import New from '@/components/New'
-import Edit from '@/components/Edit'
+// import Edit from '@/components/Edit'
 import Add from '@/components/Add'
 import EmployeeView from '@/components/EmployeeView'
 import Login from '@/components/Login'
 import Register from '@/components/Register'
+import EditCate from '@/components/EditCate'
 import firebase from 'firebase'
 
 Vue.use(Router)
@@ -47,8 +48,8 @@ let router = new Router({
     },
     {
       path: '/:employee_id',
-      name: 'edit',
-      component: Edit,
+      name: 'editcate',
+      component: EditCate,
       meta: {
         requiresAuth: true
       }

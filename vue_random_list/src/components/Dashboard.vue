@@ -7,12 +7,17 @@
         </div>
       </div>
     </div>
-    <div class="row">
-      <div class="dropdown" v-on:click="dropDown()">
-        <div class="content">
-          <input type="text" placeholder="" disabled  v-bind:value='currentCate'>
-          <div class="inner">
-            <div v-for="li in cate" v-bind:key="li" class="option" v-on:click="show(li)">{{li}}</div>
+    <div class="row flex-wrap">
+      <div class="input-items icon">
+        <router-link v-bind:to="{ name: 'editcate', params: {employee_id: user.ep_id}, query:{current_cate: currentCate}}"><i class="large material-icons">library_add</i></router-link>
+      </div>
+      <div class="input-items">
+        <div class="dropdown" v-on:click="dropDown()">
+          <div class="content">
+            <input type="text" placeholder="" disabled  v-bind:value='currentCate'>
+            <div class="inner">
+              <div v-for="li in cate" v-bind:key="li" class="option" v-on:click="show(li)">{{li}}</div>
+            </div>
           </div>
         </div>
       </div>
@@ -20,7 +25,7 @@
     <div class="row">
       <div class="input-field col s8 m10">
         <input ref="inputText" id="input_text" type="text" v-model="inputText" v-on:keyup.enter="inputTextFunc">
-        <label ref="labelText" for="input_text">input your text</label>
+        <label ref="labelText" for="input_text"></label>
       </div>
       <button class="btn large pink accent-3 col s4 m2" v-on:click="inputTextFunc"><i class="fa fa-plus"></i></button>
     </div>
@@ -268,42 +273,6 @@ export default {
   }
   .reset-btn {
     color: #999999;
-  }
-  .input-field {
-    padding: 0;
-    & > label:not(.label-icon).active {
-      -webkit-transform: translate(0px, 0px) scale(0.4);
-      transform: translate(0px, 0px) scale(0.4);
-      -webkit-transform-origin: 0 0;
-      transform-origin: 0 0;
-    }
-    input,label {
-      font-size: 2rem;
-    }
-    label {
-      left: 2rem;
-    }
-    input {
-      height: 5rem;
-      background: white;
-      display: inline-block;
-      box-sizing: border-box;
-      padding: 0 2rem;
-      border: 1px solid #9e9e9e;
-      border-right: 0px;
-      border-bottom-style: inset;
-      border-radius: 1rem 0 0 1rem;
-      }
-      & + button.btn {
-      box-shadow: none;
-      margin: 1rem 0;
-      height: 5rem;
-      font-size: 2rem;
-      border-radius: 0 1rem 1rem 0;
-      i {
-        font-size: 2rem;
-        }
-    }
   }
   #ramdomtext {
     font-size: 5rem;

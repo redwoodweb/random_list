@@ -26,5 +26,5 @@ export default {
 @import "./assets/scss/components/select_box";
 @import "./assets/scss/general_ui";
 @import "./assets/scss/common";
-
+@import "./assets/scss/layout";
 </style>
