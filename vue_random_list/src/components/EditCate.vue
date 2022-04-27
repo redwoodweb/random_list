@@ -10,12 +10,12 @@
       <button class="btn large pink accent-3 col s4 m2" v-on:click="inputTextFunc"><i class="fa fa-plus"></i></button>
     </div>
     <div class="row">
-      <form class="col s12">        
+      <form class="col s12">
         <div class="row">
-          <div class="input-field col s12">            
+          <div class="input-field col s12">
             <ul class="collection">
               <li class="collection-item">
-                <div class="chip gray accent-2 black-text">{{constCate}}</div>                
+                <div class="chip gray accent-2 black-text">{{constCate}}</div>
                 <div v-for="items in cateList" v-bind:key="items.id" class="chip pink accent-2 white-text">{{items}}<i class="close-btn material-icons" v-on:click="removeList(`${items}`)">close</i></div>
               </li>
             </ul>
@@ -36,7 +36,7 @@ export default {
       loading: false,
       user: {
         ep_id: null,
-        list: null,
+        list: null
       },
       inputText: '',
       currentCate: null,
