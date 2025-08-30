@@ -1,6 +1,6 @@
-import firebase from 'firebase/app'
-import 'firebase/firestore'
-import {firebaseConfig} from './firbaseconfig'
+import firebase from "firebase/app"
+import "firebase/firestore"
+import { firebaseConfig } from "./firbaseconfig"
 
 const firebaseApp = firebase.initializeApp(firebaseConfig)
 

@@ -1,5 +1,5 @@
 <template>
-  <div id="footer" style="display: none;">
+  <div id="footer" style="display: none">
     <div class="col s12 green">
       <h2 class="white-text">copyright</h2>
     </div>
@@ -8,7 +8,7 @@
 
 <script>
 export default {
-  name: 'Gnfooter'
+  name: "Gnfooter"
 }
 </script>
 
