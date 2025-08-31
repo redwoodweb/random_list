@@ -21,7 +21,7 @@
       <div class="input-items">
         <div class="dropdown" @click="dropDown()">
           <div class="content">
-            <input :value="currentCate" type="text" placeholder="" disabled />
+            <input :value="currentCate" type="text" placeholder="" readonly />
             <div class="inner">
               <div v-for="li in cate" :key="li" class="option" @click="show(li)">
                 {{ li }}
