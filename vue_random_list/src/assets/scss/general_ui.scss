@@ -57,12 +57,12 @@ textarea.materialize-textarea:focus:not([readonly]) + label {
     height: 20vh;
     transform: translateY(-5vh);
     justify-content: center;
+    align-items: flex-start;
     overflow: hidden;
     // border: 10px solid rgba(255, 150, 185, 1);
     border: 10px solid rgba(255, 64, 129, 1);
     background-color: #ffffff;
     border-radius: 15vh;
-    // background: #ff4081;
     background: #ffffff;
     box-sizing: content-box;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
@@ -81,7 +81,9 @@ textarea.materialize-textarea:focus:not([readonly]) + label {
 }
 .randombox {
   position: absolute;
+  width: 100%;
   top: 0;
+  left: 0;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -108,7 +110,7 @@ textarea.materialize-textarea:focus:not([readonly]) + label {
     flex-shrink: 0;
     text-align: center;
     @media screen and (max-width: 520px) {
-      font-size: 3.2rem;
+      font-size: 3.4rem;
     }
   }
 }
