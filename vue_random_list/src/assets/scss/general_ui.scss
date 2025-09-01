@@ -35,6 +35,10 @@ textarea.materialize-textarea:focus:not([readonly]) + label {
   color: #f50057;
 }
 
+.no-keyboard {
+  pointer-events: none;
+}
+
 .random-box-wrap {
   &.on {
     transform: translateY(0);
