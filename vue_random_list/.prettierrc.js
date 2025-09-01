@@ -6,7 +6,7 @@ module.exports = {
   semi: false,
 
   // 탭 대신 스페이스 사용
-  // useTabs: true,
+  useTabs: false,
 
   printWidth: 100,
 
@@ -14,10 +14,10 @@ module.exports = {
   tabWidth: 2,
 
   // 객체나 배열 끝 쉼표 사용 여부
-  trailingComma: 'none',
+  trailingComma: "none",
 
   // 함수 괄호 앞뒤 공백
-  bracketSpacing: true,
+  bracketSpacing: true
 
   // JSX 안에서 >를 다음 줄에 붙일지 여부
   // bracketSameLine: false,
