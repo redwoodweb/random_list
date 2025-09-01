@@ -209,7 +209,7 @@ export default {
     suffleList: function () {
       let listLength = this.mlist.length
       let randomNum = Math.floor(Math.random() * listLength)
-      console.log(listLength)
+      // console.log(listLength)
       if (listLength !== 0 && listLength !== null) {
         this.isActive = true
         this.isVisible = true
