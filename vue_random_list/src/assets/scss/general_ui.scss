@@ -87,6 +87,7 @@ textarea.materialize-textarea:focus:not([readonly]) + label {
   justify-content: space-between;
   align-items: center;
   flex-wrap: nowrap;
+  text-align: center;
   transform: translateY(20vh);
   transition: 0.1s;
   filter: blur(1.5rem);
