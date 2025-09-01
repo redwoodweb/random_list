@@ -63,7 +63,6 @@ textarea.materialize-textarea:focus:not([readonly]) + label {
     border: 10px solid rgba(255, 64, 129, 1);
     background-color: #ffffff;
     border-radius: 15vh;
-    background: #ffffff;
     box-sizing: content-box;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
     filter: drop-shadow(0, 0, 25px, #000000);
@@ -76,6 +75,43 @@ textarea.materialize-textarea:focus:not([readonly]) + label {
       left: 0;
       border-radius: 15vh;
       box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.2);
+    }
+    #randum-text-ani {
+      position: absolute;
+      width: 100%;
+      top: 0;
+      left: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: nowrap;
+      text-align: center;
+      transform: translateY(0vh);
+      transition-duration: 0.1s;
+      transition-timing-function: linear;
+      z-index: 500;
+      opacity: 0;
+      &.on {
+        opacity: 1;
+      }
+      filter: blur(1.5rem);
+      & > div {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 3.8rem;
+        font-weight: bold;
+        color: #ff4081;
+        flex-basis: 20vh;
+        flex-grow: 1;
+        flex-shrink: 0;
+        text-align: center;
+        @media screen and (max-width: 520px) {
+          font-size: 3rem;
+        }
+      }
     }
   }
 }
@@ -91,13 +127,15 @@ textarea.materialize-textarea:focus:not([readonly]) + label {
   flex-wrap: nowrap;
   text-align: center;
   transform: translateY(20vh);
-  transition: 0.1s;
+  transition-duration: 1s;
+  transition-timing-function: ease-out;
   filter: blur(1.5rem);
   &.transition {
     filter: blur(0);
-    transition: 1s ease-out;
+    transition-duration: 1s;
+    // transition-timing-function: ease-out;
   }
-  div {
+  & > div {
     width: 100%;
     display: flex;
     justify-content: center;
@@ -110,7 +148,7 @@ textarea.materialize-textarea:focus:not([readonly]) + label {
     flex-shrink: 0;
     text-align: center;
     @media screen and (max-width: 520px) {
-      font-size: 3.4rem;
+      font-size: 3rem;
     }
   }
 }

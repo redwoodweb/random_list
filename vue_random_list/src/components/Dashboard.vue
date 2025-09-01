@@ -1,7 +1,8 @@
 <template>
   <div class="intro contents">
     <div :class="{ on: isVisible }" class="random-box-wrap">
-      <div class="inner">
+      <div ref="rbInner" class="inner">
+        <div id="randum-text-ani" ref="rbRef"></div>
         <div ref="randombox" class="randombox">
           <div v-for="(items, i) in mlist" :key="i">{{ items }}</div>
         </div>
@@ -131,16 +132,43 @@ export default {
                 })
               }
             }
+            // 데이터를 가져온 후 처리하기
+            // 데이터와 관련된 초기요소는 여기에서 처리
+            this.$nextTick(function () {
+              let rbParent = this.$refs.randombox
+              let rbInner = this.$refs.rbInner
+              let rbRef = this.$refs.rbRef
+              function copyElem(parent, other) {
+                Array.from(parent.children).forEach((child) => {
+                  let clone = child.cloneNode(true)
+                  other.appendChild(clone)
+                })
+              }
+
+              copyElem(rbParent, rbRef) // 기존 메뉴요소를 복사해서 새로 생성한 요소에 추가
+              rbInner.appendChild(rbRef) // 추가된 요소를 애니메이션이 동작할 위치에 추가
+
+              for (let i; 50 > rbRef.children.length; i++) {
+                copyElem(rbRef, rbRef) //새로 생성한 요소에 복사한 요소의 개수를 복사해서 늘려줌
+              }
+            })
           }
         })
       })
   },
-  mountedg() {
+  mounted() {
+    //mounted에서는 아직 firebase의 데이터가 도착하기 전단계
     this.$nextTick(function () {
       // 모든 화면이 렌더링된 후 실행합니다.
+      console.log("mounted")
       // let elem = this.$el
       // elem.querySelector('h2').style.margin = '0'
       // $(elem).find('h2').css('background', 'red')
+      // 또 한 번 nextTick을 감싸서 DOM 확정 후 실행
+      // this.$nextTick(() => {
+      //   console.log(this.$refs.randombox.children)
+      //   console.log(Array.from(this.$refs.randombox.children))
+      // })
     })
   },
   methods: {
@@ -195,13 +223,16 @@ export default {
         })
     },
     aniFunc: function () {
-      let addNum = 20
       this.timeOutId = window.setTimeout(() => {
-        if (this.mlist.length === this.count) {
+        const rbRef = this.$refs.rbRef
+        let addNum = 20 //random text height 와 같은 크기
+        if (10 === this.count) {
           this.count = 0
+          rbRef.style = "opacity: 0;"
+          return
         }
-        addNum += this.count * 20 * -1 // 첫번째 메뉴일때 하단에서 올라오는 효과 주기  settimeout이 종료될때 항상 count 0으로 종료되기때문
-        this.$refs.randombox.style.transform = "translateY(" + addNum + "vh)"
+        let moveY = addNum + this.count * 20 * -1 // 첫번째 메뉴일때 하단에서 올라오는 효과 주기  settimeout이 종료될때 항상 count 0으로 종료되기때문
+        rbRef.style.transform = "translateY(" + moveY + "vh)"
         this.count += 1 //  count 1추가 후 종료 cleartimeout 이후 아래코드에서 count 출력 시 기존 현재 카운터 보다 1 많음
         this.aniFunc()
       }, 80)
@@ -209,17 +240,19 @@ export default {
     suffleList: function () {
       let listLength = this.mlist.length
       let randomNum = Math.floor(Math.random() * listLength)
+
       // console.log(listLength)
       if (listLength !== 0 && listLength !== null) {
         this.isActive = true
         this.isVisible = true
+        this.$refs.rbRef.style = "opacity: 1;"
         this.aniFunc()
+
         window.setTimeout(() => {
           clearTimeout(this.timeOutId)
           this.$refs.randombox.classList.add("transition")
-          // console.log(this.$refs.randombox.style.transform)
           this.$refs.randombox.style.transform = "translateY(" + randomNum * 20 * -1 + "vh)"
-        }, 800)
+        }, 1000)
         window.setTimeout(() => {
           this.isVisible = false
           this.count = 0
