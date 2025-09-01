@@ -96,6 +96,7 @@ textarea.materialize-textarea:focus:not([readonly]) + label {
     transition: 1s ease-out;
   }
   div {
+    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
