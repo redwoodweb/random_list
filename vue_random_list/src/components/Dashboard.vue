@@ -209,23 +209,27 @@ export default {
     suffleList: function () {
       let listLength = this.mlist.length
       let randomNum = Math.floor(Math.random() * listLength)
-      // console.log("index:"+randomNum)
-      this.isActive = true
-      this.isVisible = true
-      this.aniFunc()
-      window.setTimeout(() => {
-        clearTimeout(this.timeOutId)
-        this.$refs.randombox.classList.add("transition")
-        // console.log(this.$refs.randombox.style.transform)
-        this.$refs.randombox.style.transform = "translateY(" + randomNum * 20 * -1 + "vh)"
-      }, 800)
-      window.setTimeout(() => {
-        this.isVisible = false
-        this.count = 0
-        this.$refs.randombox.classList.remove("transition")
-        this.$refs.randombox.style.transform = "translateY(0vh)"
-        this.ramdomText = this.mlist[randomNum]
-      }, 2500)
+      console.log(listLength)
+      if (listLength !== 0 && listLength !== null) {
+        this.isActive = true
+        this.isVisible = true
+        this.aniFunc()
+        window.setTimeout(() => {
+          clearTimeout(this.timeOutId)
+          this.$refs.randombox.classList.add("transition")
+          // console.log(this.$refs.randombox.style.transform)
+          this.$refs.randombox.style.transform = "translateY(" + randomNum * 20 * -1 + "vh)"
+        }, 800)
+        window.setTimeout(() => {
+          this.isVisible = false
+          this.count = 0
+          this.$refs.randombox.classList.remove("transition")
+          this.$refs.randombox.style.transform = "translateY(0vh)"
+          this.ramdomText = this.mlist[randomNum]
+        }, 2500)
+      } else {
+        alert("현재 카테고리에 리스트가 없습니다. 리스트를 추가해주세요!")
+      }
     },
     resetList: function () {
       this.ramdomText = "텅"
