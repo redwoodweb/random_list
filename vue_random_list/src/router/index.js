@@ -8,6 +8,7 @@ import EmployeeView from "@/components/EmployeeView"
 import Login from "@/components/Login"
 import Register from "@/components/Register"
 import EditCate from "@/components/EditCate"
+import Guest from "@/components/Guest"
 import firebase from "firebase"
 
 Vue.use(Router)
@@ -47,14 +48,6 @@ let router = new Router({
       }
     },
     {
-      path: "/:employee_id",
-      name: "editcate",
-      component: EditCate,
-      meta: {
-        requiresAuth: true
-      }
-    },
-    {
       path: "/add",
       name: "add",
       component: Add,
@@ -63,9 +56,25 @@ let router = new Router({
       }
     },
     {
-      path: "/:employee_id",
+      path: "/guest",
+      name: "guest",
+      component: Guest,
+      meta: {
+        requiresGuest: true
+      }
+    },
+    {
+      path: "/employeeview/:employee_id",
       name: "employeeview",
       component: EmployeeView,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: "/edicate/:employee_id",
+      name: "editcate",
+      component: EditCate,
       meta: {
         requiresAuth: true
       }
@@ -92,14 +101,10 @@ router.beforeEach((to, from, next) => {
     }
   } else if (to.matched.some((record) => record.meta.requiresGuest)) {
     //  check if not logged in
-    console.log()
     if (firebase.auth().currentUser) {
-      //  go to login
+      //  go to home
       next({
-        path: "/",
-        query: {
-          redirect: to.fullPath
-        }
+        path: "/" // 해단 부분에서  redirect : to.fullPath를 사용하면 로그인상태에서 게스트페이지 접근시 홈<->게스트페이지 무한 루프에 빠짐
       })
     } else {
       // Proceed to route
