@@ -47,9 +47,12 @@ export default {
       password: "",
       user: {
         ep_id: null,
-        list: []
+        list: new Map()
       }
     }
+  },
+  created() {
+    this.user.list.set("mymenu", null)
   },
   methods: {
     register: function (e) {
