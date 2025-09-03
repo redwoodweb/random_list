@@ -1,4 +1,4 @@
-# firestore-project1
+# random-list
 
 > A Vue.js project
 
