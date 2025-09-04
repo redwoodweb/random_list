@@ -119,14 +119,14 @@ export default {
         console.log(this.user.list)
         window.localStorage.setItem("list", JSON.stringify(this.user.list)) // localStorage 추가
         console.log(window.localStorage.getItem("list"))
-        db.collection("user")
-          .where("ep_id", "==", this.user.ep_id)
-          .get()
-          .then((querySnapshop) => {
-            querySnapshop.forEach((doc) => {
-              doc.ref.update(this.user)
-            })
-          })
+        // db.collection("user")
+        //   .where("ep_id", "==", this.user.ep_id)
+        //   .get()
+        //   .then((querySnapshop) => {
+        //     querySnapshop.forEach((doc) => {
+        //       doc.ref.update(this.user)
+        //     })
+        //   })
       }
       this.inputText = ""
       this.$refs.inputText.blur()
