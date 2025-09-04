@@ -2,8 +2,8 @@
   <div class="intro contents">
     <div :class="{ on: isVisible }" class="random-box-wrap">
       <div ref="rbInner" class="inner">
-        <div id="randum-text-ani" ref="rbRef"></div>
-        <div ref="randombox" class="randombox">
+        <div ref="randomAni"></div>
+        <div ref="randombox" :class="['randombox', { onAni: isAni, on: randomBoxView }]">
           <div v-for="(items, i) in mlist" :key="i">{{ items }}</div>
         </div>
       </div>
@@ -99,8 +99,10 @@ export default {
       selectElem: null,
       mlist: [],
       isVisible: false,
-      timeOutId: null,
-      count: 0
+      count: 0,
+      isAni: false,
+      timeOut: null,
+      randomBoxView: false
     }
   },
   created() {
@@ -109,51 +111,50 @@ export default {
       .get()
       .then((querySnapshop) => {
         querySnapshop.forEach((doc) => {
-          if (currentUser === doc.data().ep_id) {
-            this.user.ep_id = doc.data().ep_id
-            if (doc.data().list && doc.data().list !== null && doc.data().list !== "") {
+          try {
+            if (currentUser === doc.data().ep_id) {
+              this.user.ep_id = doc.data().ep_id
               this.user.list = doc.data().list
-              // console.log(doc.data().list)
               // 카테고리 목록 가져오기
-              // for( const items in doc.data().list){
-              //   console.log(items)
-              // }
-              for (const [key] of Object.entries(doc.data().list)) {
-                this.cate.push(key)
-                // console.log("카테고리모음"+this.cate)
+              for (const cates in doc.data().list) {
+                // console.log(cates)
+                this.cate.push(cates)
               }
-              // 현재 카테고리에 할당
+
               // this.currentCate = this.cate[0]
-              // console.log(this.user.list)
-              // 현재 카테고리에 매칭된 데이터 가져오기
-              for (const [key, value] of Object.entries(doc.data().list)) {
-                if (key === this.currentCate) {
-                  value.forEach((val) => {
-                    this.mlist.push(val)
-                  })
+              // for (const [key] of Object.entries(doc.data().list)) {
+              //   this.cate.push(key)
+              //   console.log("카테고리모음" + this.cate)
+              // }
+              // // 현재 카테고리에 할당
+              // // this.currentCate = this.cate[0]
+              // // console.log(this.user.list)
+              // // 현재 카테고리에 매칭된 데이터 가져오기
+              if (doc.data().list.mymenu.length !== 0) {
+                for (const [key, value] of Object.entries(doc.data().list)) {
+                  if (key === this.currentCate) {
+                    value.forEach((val) => {
+                      this.mlist.push(val)
+                    })
+                  }
                 }
               }
               // 데이터를 가져온 후 처리하기
               // 데이터와 관련된 초기요소는 여기에서 처리
-              this.$nextTick(function () {
-                let rbParent = this.$refs.randombox
-                let rbInner = this.$refs.rbInner
-                let rbRef = this.$refs.rbRef
-                function copyElem(parent, other) {
-                  Array.from(parent.children).forEach((child) => {
-                    let clone = child.cloneNode(true)
-                    other.appendChild(clone)
-                  })
-                }
-
-                copyElem(rbParent, rbRef) // 기존 메뉴요소를 복사해서 새로 생성한 요소에 추가
-                rbInner.appendChild(rbRef) // 추가된 요소를 애니메이션이 동작할 위치에 추가
-
-                for (let i; 50 > rbRef.children.length; i++) {
-                  copyElem(rbRef, rbRef) //새로 생성한 요소에 복사한 요소의 개수를 복사해서 늘려줌
-                }
-              })
+              // this.$nextTick(function () {
+              //   let rbParent = this.$refs.randombox
+              //   function copyElem(parent, other) {
+              //     Array.from(parent.children).forEach((child) => {
+              //       let clone = child.cloneNode(true)
+              //       other.appendChild(clone)
+              //     })
+              //   }
+              //   copyElem(rbParent, rbParent) // 기존 메뉴요소를 복사해서 새로 생성한 요소에 추가
+              // })
             }
+          } catch (error) {
+            console.error("데이터에러", error)
+            throw error
           }
         })
       })
@@ -162,15 +163,10 @@ export default {
     //mounted에서는 아직 firebase의 데이터가 도착하기 전단계
     this.$nextTick(function () {
       // 모든 화면이 렌더링된 후 실행합니다.
-      console.log("mounted")
+      // console.log("mounted")
       // let elem = this.$el
       // elem.querySelector('h2').style.margin = '0'
       // $(elem).find('h2').css('background', 'red')
-      // 또 한 번 nextTick을 감싸서 DOM 확정 후 실행
-      // this.$nextTick(() => {
-      //   console.log(this.$refs.randombox.children)
-      //   console.log(Array.from(this.$refs.randombox.children))
-      // })
     })
   },
   methods: {
@@ -225,40 +221,38 @@ export default {
         })
     },
     aniFunc: function () {
-      this.timeOutId = window.setTimeout(() => {
-        const rbRef = this.$refs.rbRef
-        let addNum = 20 //random text height 와 같은 크기
-        if (10 === this.count) {
-          this.count = 0
-          rbRef.style = "opacity: 0;"
-          return
-        }
-        let moveY = addNum + this.count * 20 * -1 // 첫번째 메뉴일때 하단에서 올라오는 효과 주기  settimeout이 종료될때 항상 count 0으로 종료되기때문
-        rbRef.style.transform = "translateY(" + moveY + "vh)"
-        this.count += 1 //  count 1추가 후 종료 cleartimeout 이후 아래코드에서 count 출력 시 기존 현재 카운터 보다 1 많음
-        this.aniFunc()
-      }, 80)
+      // this.timeOutId = window.setTimeout(() => {
+      //   const rbBoxAni = this.$refs.rbBoxAni
+      //   let addNum = 20 //random text height 와 같은 크기
+      //   if (10 === this.count) {
+      //     this.count = 0
+      //     rbBoxAni.style = "opacity: 0;"
+      //     return
+      //   }
+      //   let moveY = addNum + this.count * 20 * -1 // 첫번째 메뉴일때 하단에서 올라오는 효과 주기  settimeout이 종료될때 항상 count 0으로 종료되기때문
+      //   rbBoxAni.style.transform = "translateY(" + moveY + "vh)"
+      //   this.count += 1 //  count 1추가 후 종료 cleartimeout 이후 아래코드에서 count 출력 시 기존 현재 카운터 보다 1 많음
+      //   this.aniFunc()
+      // }, 80)
     },
     suffleList: function () {
       let listLength = this.mlist.length
       let randomNum = Math.floor(Math.random() * listLength)
+      // let listRealLeng = Array.from(this.$refs.randombox.children).length
 
       // console.log(listLength)
       if (listLength !== 0 && listLength !== null) {
+        //@transitionend, @animationend  vue 전용 이벤트를 사용하여 로직 구현하기
         this.isActive = true
         this.isVisible = true
-        this.$refs.rbRef.style = "opacity: 1;"
-        this.aniFunc()
-
+        // this.isAni = true
+        this.randomBoxView = true
         window.setTimeout(() => {
-          clearTimeout(this.timeOutId)
-          this.$refs.randombox.classList.add("transition")
           this.$refs.randombox.style.transform = "translateY(" + randomNum * 20 * -1 + "vh)"
-        }, 1000)
+        }, 100)
         window.setTimeout(() => {
           this.isVisible = false
-          this.count = 0
-          this.$refs.randombox.classList.remove("transition")
+          this.randomBoxView = false
           this.$refs.randombox.style.transform = "translateY(0vh)"
           this.ramdomText = this.mlist[randomNum]
         }, 2500)
