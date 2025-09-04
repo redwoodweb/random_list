@@ -24,9 +24,7 @@
                   <label class="black-text" for="password">Password</label>
                 </div>
 
-                <button class="btn btn-large pink accent-3 white-text" type="button" @click="login">
-                  Login
-                </button>
+                <button class="btn btn-large pink accent-3 white-text" @click="login">Login</button>
               </form>
             </div>
           </div>
