@@ -47,12 +47,9 @@ export default {
       password: "",
       user: {
         ep_id: null,
-        list: new Map()
+        list: { mymenu: [] }
       }
     }
-  },
-  created() {
-    this.user.list.set("mymenu", null)
   },
   methods: {
     register: function (e) {
@@ -88,5 +85,18 @@ export default {
 .btn {
   display: block;
   width: 100%;
+}
+
+.login {
+  .input-field {
+    width: 100%;
+
+    input:focus {
+      width: calc(100% - 42px);
+      /* border: 1px solid #f50057; */
+      border: none;
+      border-bottom: 1px solid #9e9e9e;
+    }
+  }
 }
 </style>

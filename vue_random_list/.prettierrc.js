@@ -1,4 +1,9 @@
 module.exports = {
+  extends: ["plugin:prettier/recommended"],
+  rules: {
+    // 모든 객체 키에 항상 따옴표 사용
+    "quote-props": ["error", "always"]
+  },
   // 문자열은 작은 따옴표를 사용
   singleQuote: false,
 

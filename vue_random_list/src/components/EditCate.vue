@@ -11,13 +11,13 @@
           ref="inputText"
           v-model="inputText"
           type="text"
-          @keyup.enter="inputTextFunc"
+          @keyup.enter.prevent="inputTextFunc"
         />
 
         <label ref="labelText" for="input_text"></label>
       </div>
 
-      <button class="btn large pink accent-3 col s4 m2" @click="inputTextFunc">
+      <button class="btn large pink accent-3 col s4 m2" type="button" @click="inputTextFunc">
         <i class="fa fa-plus"></i>
       </button>
     </div>
@@ -43,7 +43,7 @@
           </div>
         </div>
 
-        <button type="submit" class="btn pink accent-3 white-text" @click="updateEmployee">
+        <button type="button" class="btn pink accent-3 white-text" @click="updateEmployee">
           저장
         </button>
 
