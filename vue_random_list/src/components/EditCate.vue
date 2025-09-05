@@ -36,7 +36,7 @@
                   class="chip pink accent-2 white-text"
                 >
                   {{ items }}
-                  <i class="close-btn material-icons" @click="removeList(`${items}`)"> close </i>
+                  <i class="close-btn material-icons" @click="removeList(items)"> close </i>
                 </div>
               </li>
             </ul>
@@ -48,7 +48,11 @@
         </button>
 
         <router-link
-          :to="{ name: 'dashboard', params: { employee_id: user.ep_id } }"
+          :to="{
+            name: 'dashboard',
+            params: { employee_id: user.ep_id },
+            query: { current_cate: currentCate }
+          }"
           class="btn grey"
         >
           취소
@@ -72,7 +76,8 @@ export default {
       inputText: "",
       currentCate: null,
       cateList: [],
-      constCate: "mymenu"
+      constCate: "mymenu",
+      initialCateData: []
     }
   },
   beforeRouteEnter(to, from, next) {
@@ -88,7 +93,7 @@ export default {
             let list = doc.data().list
             for (let key in list) {
               if (key !== vm.constCate) {
-                console.log(key + "," + list[key])
+                // console.log(key + "," + list[key])
                 vm.cateList.push(key)
               }
             }
@@ -102,83 +107,69 @@ export default {
   mounted() {
     this.$nextTick(function () {
       window.localStorage.setItem("list", JSON.stringify(this.user.list))
-      console.log(window.localStorage.getItem("list"))
-      // widnow.localStorage.setItem('list',JSON.stringify(this.list)) // window.storage 저장
-      // console.log(widnow.localStorage.get('list')+'local storage')
-      // 모든 화면이 렌더링된 후 실행합니다.
-      // let elem = this.$el
-      // elem.querySelector('h2').style.margin = '0'
-      // $(elem).find('h2').css('background', 'red')
+      let winLocalList = JSON.parse(window.localStorage.getItem("list"))
+      for (const key in winLocalList) {
+        if (key !== this.constCate) {
+          this.initialCateData.push(key)
+        }
+      }
     })
   },
   methods: {
     inputTextFunc: function () {
-      if (this.inputText !== "") {
+      if (!this.cateList.includes(this.inputText) && this.inputText !== "") {
         this.cateList.push(this.inputText)
-        this.user.list[this.inputText] = []
-        console.log(this.user.list)
-        window.localStorage.setItem("list", JSON.stringify(this.user.list)) // localStorage 추가
-        console.log(window.localStorage.getItem("list"))
-        // db.collection("user")
-        //   .where("ep_id", "==", this.user.ep_id)
-        //   .get()
-        //   .then((querySnapshop) => {
-        //     querySnapshop.forEach((doc) => {
-        //       doc.ref.update(this.user)
-        //     })
-        //   })
+        this.user.list[this.inputText] = [] //빈배열의 새로운 카테고리 생성
+        this.inputText = ""
+        this.$refs.inputText.blur()
+        this.$refs.labelText.classList.remove("active")
+      } else {
+        alert("동일한 카테고리 리스트가 존재합니다.")
+        this.inputText = ""
+        this.$refs.inputText.focus()
       }
-      this.inputText = ""
-      this.$refs.inputText.blur()
-      this.$refs.labelText.classList.remove("active")
     },
     removeList: function (text) {
-      // console.log(text)
-      // for (const i in listelm) {
-      //   // console.log(i)
-      //   if (listelm[i] === text) {
-      //     // console.log(listelm[i] + ',' + text)
-      //     listelm.splice(i, 1)
-      //   }
-      // }
-      for (const [key] of Object.entries(this.user.list)) {
+      for (const key of Object.keys(this.user.list)) {
         if (key === text) {
           delete this.user.list[key]
         }
       }
-      let listelm = []
-      console.log(this.cateList)
+
+      this.cateList = []
       for (const [key] of Object.entries(this.user.list)) {
-        listelm.push(key)
+        if (key !== this.constCate) {
+          this.cateList.push(key)
+        }
       }
-      this.cateList = listelm
-      db.collection("user")
-        .where("ep_id", "==", this.user.ep_id)
-        .get()
-        .then((querySnapshop) => {
-          querySnapshop.forEach((doc) => {
-            doc.ref.update(this.user)
-          })
-        })
+    },
+    listEqual: function (initialList, currenttList) {
+      if (initialList.length !== currenttList.length) return false
+      return initialList.every((val, i) => val === currenttList[i])
     },
     updateEmployee() {
-      db.collection("user")
-        .where("ep_id", "==", this.$route.params.employee_id)
-        .get()
-        .then((querySnapshop) => {
-          querySnapshop.forEach((doc) => {
-            doc.ref
-              .update(this.user)
-              .then(() => {
-                console.log("Document successfully update!")
-                // this.$router.push({name: 'employeeview', params: {'employee_id': this.user.ep_id}})
-                window.location.href = ""
-              })
-              .catch((error) => {
-                console.error("Error removing document: ", error)
-              })
+      if (!this.listEqual(this.initialCateData, this.cateList)) {
+        alert("저장되었습니다.")
+        db.collection("user")
+          .where("ep_id", "==", this.$route.params.employee_id)
+          .get()
+          .then((querySnapshop) => {
+            querySnapshop.forEach((doc) => {
+              doc.ref
+                .update(this.user)
+                .then(() => {
+                  // console.log("Document successfully update!")
+                  // this.$router.push({name: 'employeeview', params: {'employee_id': this.user.ep_id}})
+                  window.location.href = ""
+                })
+                .catch((error) => {
+                  console.error("Error removing document: ", error)
+                })
+            })
           })
-        })
+      } else {
+        alert("변경된 카테고리가 없습니다.")
+      }
     }
   }
 }
