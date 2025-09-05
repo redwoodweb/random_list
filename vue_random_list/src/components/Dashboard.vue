@@ -2,8 +2,8 @@
   <div class="intro contents">
     <div :class="{ on: isVisible }" class="random-box-wrap">
       <div ref="rbInner" class="inner">
-        <div ref="randomAni"></div>
-        <div ref="randombox" :class="['randombox', { onAni: isAni, on: randomBoxView }]">
+        <div ref="randomAni" :class="['random-ani', { active: isAni }]"></div>
+        <div ref="randombox" :class="['randombox', { on: randomBoxView }]">
           <div v-for="(items, i) in mlist" :key="i">{{ items }}</div>
         </div>
       </div>
@@ -95,14 +95,16 @@ export default {
       cate: [],
       inputText: "",
       ramdomText: "텅",
-      isActive: false,
+      randomNum: 0,
+      isActive: false, // 랜덤리스트 결과 값을 보여주는 영역 변수
       selectElem: null,
       mlist: [],
       isVisible: false,
       count: 0,
       isAni: false,
       timeOut: null,
-      randomBoxView: false
+      randomBoxView: false,
+      listLength: 0
     }
   },
   created() {
@@ -117,19 +119,9 @@ export default {
               this.user.list = doc.data().list
               // 카테고리 목록 가져오기
               for (const cates in doc.data().list) {
-                // console.log(cates)
                 this.cate.push(cates)
               }
-
-              // this.currentCate = this.cate[0]
-              // for (const [key] of Object.entries(doc.data().list)) {
-              //   this.cate.push(key)
-              //   console.log("카테고리모음" + this.cate)
-              // }
-              // // 현재 카테고리에 할당
-              // // this.currentCate = this.cate[0]
-              // // console.log(this.user.list)
-              // // 현재 카테고리에 매칭된 데이터 가져오기
+              //현재 카테고리에 매칭된 데이터 가져오기
               if (doc.data().list.mymenu.length !== 0) {
                 for (const [key, value] of Object.entries(doc.data().list)) {
                   if (key === this.currentCate) {
@@ -139,18 +131,7 @@ export default {
                   }
                 }
               }
-              // 데이터를 가져온 후 처리하기
-              // 데이터와 관련된 초기요소는 여기에서 처리
-              // this.$nextTick(function () {
-              //   let rbParent = this.$refs.randombox
-              //   function copyElem(parent, other) {
-              //     Array.from(parent.children).forEach((child) => {
-              //       let clone = child.cloneNode(true)
-              //       other.appendChild(clone)
-              //     })
-              //   }
-              //   copyElem(rbParent, rbParent) // 기존 메뉴요소를 복사해서 새로 생성한 요소에 추가
-              // })
+              this.randoAniAddList(this.$refs.randombox)
             }
           } catch (error) {
             console.error("데이터에러", error)
@@ -163,13 +144,35 @@ export default {
     //mounted에서는 아직 firebase의 데이터가 도착하기 전단계
     this.$nextTick(function () {
       // 모든 화면이 렌더링된 후 실행합니다.
-      // console.log("mounted")
-      // let elem = this.$el
-      // elem.querySelector('h2').style.margin = '0'
-      // $(elem).find('h2').css('background', 'red')
     })
   },
   methods: {
+    randoAniAddList: function (el) {
+      // 데이터를 가져온 후 처리하기
+      // 데이터와 관련된 초기요소는 여기에서 처리
+      let rbParent = el
+      let rotateCount = 10 // 리스 개수 10개이하 일때 기본 최소한의 회전수를 갖기 위한 상수값 설정
+      this.$nextTick(function () {
+        function copyElem(parent, other) {
+          Array.from(parent.children).forEach((child) => {
+            let clone = child.cloneNode(true)
+            other.appendChild(clone)
+          })
+        }
+        this.$refs.randomAni.innerHTML = ""
+        copyElem(rbParent, this.$refs.randomAni) // 기존 메뉴요소를 복사해서 새로 생성한 요소에 추가
+        if (this.mlist.length < rotateCount) {
+          for (let i = 0; i < rotateCount - this.mlist.length; i++) {
+            copyElem(rbParent, this.$refs.randomAni)
+          }
+        }
+      })
+    },
+    randomAni: function (e) {
+      if (e.propertyName === "transform") {
+        console.log("transition ended!!")
+      }
+    },
     inputTextFunc: function () {
       if (this.inputText !== "") {
         this.mlist.push(this.inputText)
@@ -192,12 +195,10 @@ export default {
       this.$refs.labelText.classList.remove("active")
     },
     removeList: function (text) {
-      // console.log(text)
+      //리스트 개별 삭제 기능
       let listelm = this.user.list
       for (const i in listelm) {
-        // console.log(i)
         if (listelm[i] === text) {
-          // console.log(listelm[i] + ',' + text)
           listelm.splice(i, 1)
         }
       }
@@ -220,43 +221,31 @@ export default {
           })
         })
     },
-    aniFunc: function () {
-      // this.timeOutId = window.setTimeout(() => {
-      //   const rbBoxAni = this.$refs.rbBoxAni
-      //   let addNum = 20 //random text height 와 같은 크기
-      //   if (10 === this.count) {
-      //     this.count = 0
-      //     rbBoxAni.style = "opacity: 0;"
-      //     return
-      //   }
-      //   let moveY = addNum + this.count * 20 * -1 // 첫번째 메뉴일때 하단에서 올라오는 효과 주기  settimeout이 종료될때 항상 count 0으로 종료되기때문
-      //   rbBoxAni.style.transform = "translateY(" + moveY + "vh)"
-      //   this.count += 1 //  count 1추가 후 종료 cleartimeout 이후 아래코드에서 count 출력 시 기존 현재 카운터 보다 1 많음
-      //   this.aniFunc()
-      // }, 80)
-    },
     suffleList: function () {
-      let listLength = this.mlist.length
-      let randomNum = Math.floor(Math.random() * listLength)
-      // let listRealLeng = Array.from(this.$refs.randombox.children).length
+      this.randoAniAddList(this.$refs.randombox)
+      this.listLength = this.mlist.length
+      this.randomNum = Math.floor(Math.random() * this.listLength)
 
-      // console.log(listLength)
-      if (listLength !== 0 && listLength !== null) {
-        //@transitionend, @animationend  vue 전용 이벤트를 사용하여 로직 구현하기
+      if (this.listLength !== 0 && this.listLength !== null) {
+        //리스트가 존재할때 만 실행
         this.isActive = true
         this.isVisible = true
-        // this.isAni = true
-        this.randomBoxView = true
+        this.isAni = true // 랜덤값이 나오기전 회전하는 애니매이션 구현
         window.setTimeout(() => {
-          this.$refs.randombox.style.transform = "translateY(" + randomNum * 20 * -1 + "vh)"
-        }, 100)
+          this.randomBoxView = true // 실제 최종 결과가 나오는 애니매션
+          this.$refs.randombox.style.transform = "translateY(" + this.randomNum * 20 * -1 + "vh)"
+        }, 1000)
         window.setTimeout(() => {
+          // 랜덤 추출후 종료하여 램덤화면 삭제하고 원래 대시보드화면이 보이게 구현
+          this.isActive = false
           this.isVisible = false
           this.randomBoxView = false
+          this.isAni = false
           this.$refs.randombox.style.transform = "translateY(0vh)"
-          this.ramdomText = this.mlist[randomNum]
-        }, 2500)
+          this.ramdomText = this.mlist[this.randomNum]
+        }, 3000)
       } else {
+        // 리스트가 존재하지 않을때
         alert("현재 카테고리에 리스트가 없습니다. 리스트를 추가해주세요!")
       }
     },
@@ -274,10 +263,8 @@ export default {
             if (currentUser === doc.data().ep_id) {
               this.user.ep_id = doc.data().ep_id
               this.user.list = doc.data().list
-              // console.log(doc.data().list)
               // 현재 카테고리에 할당
               this.currentCate = elem
-              // console.log(this.user.list)
               // 현재 카테고리에 매칭된 데이터 가져오기
               for (const [key, value] of Object.entries(doc.data().list)) {
                 if (key === this.currentCate) {
