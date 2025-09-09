@@ -159,7 +159,10 @@ export default {
                 .update(this.user)
                 .then(() => {
                   // console.log("Document successfully update!")
-                  // this.$router.push({name: 'employeeview', params: {'employee_id': this.user.ep_id}})
+                  this.$router.push({
+                    name: "employeeview",
+                    params: { employee_id: this.user.ep_id }
+                  })
                   window.location.href = ""
                 })
                 .catch((error) => {

@@ -33,19 +33,21 @@
       </div>
     </div>
     <div class="row">
-      <div class="input-field col s8 m10">
-        <input
-          id="input_text"
-          ref="inputText"
-          v-model="inputText"
-          type="text"
-          @keyup.enter="inputTextFunc"
-        />
-        <label ref="labelText" for="input_text"></label>
-      </div>
-      <button class="btn large pink accent-3 col s4 m2" type="button" @click="inputTextFunc">
-        <i class="fa fa-plus"></i>
-      </button>
+      <form @submit.prevent>
+        <div class="input-field col s8 m10">
+          <input
+            id="input_text"
+            ref="inputText"
+            v-model="inputText"
+            type="text"
+            @keydown.enter="inputTextFunc"
+          />
+          <label ref="labelText" for="input_text"></label>
+        </div>
+        <button class="btn large pink accent-3 col s4 m2" type="button" @click="inputTextFunc">
+          <i class="fa fa-plus"></i>
+        </button>
+      </form>
     </div>
     <ul class="collection">
       <li class="collection-item">
