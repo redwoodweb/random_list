@@ -40,7 +40,7 @@
             ref="inputText"
             v-model="inputText"
             type="text"
-            @keydown.enter="inputTextFunc"
+            @keyup.enter="inputTextFunc"
           />
           <label ref="labelText" for="input_text"></label>
         </div>
