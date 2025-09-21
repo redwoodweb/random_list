@@ -4,7 +4,7 @@
       <div ref="rbInner" class="inner">
         <div ref="randomAni" :class="['random-ani', { active: isAni }]"></div>
         <div ref="randombox" :class="['randombox', { on: randomBoxView }]">
-          <div v-for="(items, i) in mlist" :key="i">{{ items }}</div>
+          <div v-for="(items, i) in user.list[this.currentCate]" :key="i">{{ items }}</div>
         </div>
       </div>
     </div>
@@ -33,7 +33,7 @@
       </div>
     </div>
     <div class="row">
-      <form @submit.prevent>
+      <form @submit.prevent="inputTextFunc">
         <div class="input-field col s8 m10">
           <input
             id="input_text"
@@ -44,14 +44,19 @@
           />
           <label ref="labelText" for="input_text"></label>
         </div>
-        <button class="btn large pink accent-3 col s4 m2" type="button" @click="inputTextFunc">
+        <button class="btn large pink accent-3 col s4 m2" type="submit">
           <i class="fa fa-plus"></i>
         </button>
       </form>
     </div>
+    <!-- {{ user.list[currentCate] }} -->
     <ul class="collection">
       <li class="collection-item">
-        <div v-for="items in mlist" :key="items.id" class="chip pink accent-2 white-text">
+        <div
+          v-for="items in user.list[this.currentCate]"
+          :key="items.id"
+          class="chip pink accent-2 white-text"
+        >
           {{ items }}<i class="close-btn material-icons" @click="removeList(`${items}`)">close</i>
         </div>
       </li>
@@ -91,7 +96,7 @@ export default {
     return {
       user: {
         ep_id: null,
-        list: []
+        list: {}
       },
       currentCate: "mymenu",
       cate: [],
@@ -100,7 +105,6 @@ export default {
       randomNum: 0,
       isActive: false, // 랜덤리스트 결과 값을 보여주는 영역 변수
       selectElem: null,
-      mlist: [],
       isVisible: false,
       count: 0,
       isAni: false,
@@ -123,16 +127,16 @@ export default {
               for (const cates in doc.data().list) {
                 this.cate.push(cates)
               }
-              //현재 카테고리에 매칭된 데이터 가져오기
-              if (doc.data().list.mymenu.length !== 0) {
-                for (const [key, value] of Object.entries(doc.data().list)) {
-                  if (key === this.currentCate) {
-                    value.forEach((val) => {
-                      this.mlist.push(val)
-                    })
-                  }
-                }
-              }
+              // //현재 카테고리에 매칭된 데이터 가져오기
+              // if (doc.data().list.mymenu.length !== 0) {
+              //   for (const [key, value] of Object.entries(doc.data().list)) {
+              //     if (key === this.currentCate) {
+              //       value.forEach((val) => {
+              //         this.user.list[this.currentCate].push(val)
+              //       })
+              //     }
+              //   }
+              // }
               this.randoAniAddList(this.$refs.randombox)
             }
           } catch (error) {
@@ -163,8 +167,8 @@ export default {
         }
         this.$refs.randomAni.innerHTML = ""
         copyElem(rbParent, this.$refs.randomAni) // 기존 메뉴요소를 복사해서 새로 생성한 요소에 추가
-        if (this.mlist.length < rotateCount) {
-          for (let i = 0; i < rotateCount - this.mlist.length; i++) {
+        if (this.user.list[this.currentCate].length < rotateCount) {
+          for (let i = 0; i < rotateCount - this.user.list[this.currentCate].length; i++) {
             copyElem(rbParent, this.$refs.randomAni)
           }
         }
@@ -176,40 +180,36 @@ export default {
       }
     },
     inputTextFunc: function () {
-      if (this.inputText !== "") {
-        this.mlist.push(this.inputText)
-        for (const [key, value] of Object.entries(this.user.list)) {
-          if (key === this.currentCate) {
-            value.push(this.inputText)
-          }
-        }
-        db.collection("user")
-          .where("ep_id", "==", this.user.ep_id)
-          .get()
-          .then((querySnapshop) => {
-            querySnapshop.forEach((doc) => {
-              doc.ref.update(this.user)
-            })
+      if (this.inputText.trim() === "") return
+
+      // 해당 카테고리에 데이터 추가
+      this.user.list[this.currentCate].push(this.inputText)
+      db.collection("user")
+        .where("ep_id", "==", this.user.ep_id)
+        .get()
+        .then((querySnapshop) => {
+          querySnapshop.forEach((doc) => {
+            doc.ref.update(this.user)
           })
-      }
+        })
       this.inputText = ""
-      this.$refs.inputText.blur()
+      // this.$refs.inputText.blur()
       this.$refs.labelText.classList.remove("active")
     },
     removeList: function (text) {
       //리스트 개별 삭제 기능
-      let listelm = this.user.list
-      for (const i in listelm) {
-        if (listelm[i] === text) {
-          listelm.splice(i, 1)
-        }
-      }
+      // let listelm = this.user.list
+      // for (const i in listelm) {
+      //   if (listelm[i] === text) {
+      //     listelm.splice(i, 1)
+      //   }
+      // }
       for (const [key, value] of Object.entries(this.user.list)) {
         if (key === this.currentCate) {
           for (const i in value) {
             if (value[i] === text) {
               value.splice(i, 1)
-              this.mlist = value
+              this.user.list[this.currentCate] = value
             }
           }
         }
@@ -225,7 +225,7 @@ export default {
     },
     suffleList: function () {
       this.randoAniAddList(this.$refs.randombox)
-      this.listLength = this.mlist.length
+      this.listLength = this.user.list[this.currentCate].length
       this.randomNum = Math.floor(Math.random() * this.listLength)
 
       if (this.listLength !== 0 && this.listLength !== null) {
@@ -244,7 +244,7 @@ export default {
           this.randomBoxView = false
           this.isAni = false
           this.$refs.randombox.style.transform = "translateY(0vh)"
-          this.ramdomText = this.mlist[this.randomNum]
+          this.ramdomText = this.user.list[this.currentCate][this.randomNum]
         }, 3000)
       } else {
         // 리스트가 존재하지 않을때
@@ -270,7 +270,7 @@ export default {
               // 현재 카테고리에 매칭된 데이터 가져오기
               for (const [key, value] of Object.entries(doc.data().list)) {
                 if (key === this.currentCate) {
-                  this.mlist = value
+                  this.user.list[this.currentCate] = value
                 }
               }
             }
